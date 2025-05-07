@@ -4,15 +4,17 @@ import SaleItemCard from "../../components/saleItemCard/saleItemCard";
 import style from './UploadItems.module.css'
 import { useOutletContext } from "react-router-dom";
 import { FaCartShopping } from "react-icons/fa6";
+import { axiosInstance } from "../../api/axiosInstance";
 
 export default function UploadItems() {
-  const { contextUserItemData } = useOutletContext();
+  const { contextUserItemData, setContextUserItemData } = useOutletContext();
   const [page, setPage] = useState(1)
   const itemPerPage = 6;
   const indexOfLast = page * itemPerPage;
   const indexOfFirst = indexOfLast - itemPerPage;
   const currentitems = contextUserItemData.slice(indexOfFirst, indexOfLast);
   const totalPages = Math.ceil(contextUserItemData.length / itemPerPage);
+
   return (
     <>
       <div className={contextUserItemData.length === 0 ? style.mainContainer : ''}>
@@ -21,7 +23,7 @@ export default function UploadItems() {
             <>
               <div className={style.UploadContainer}>
                 {currentitems.map((item) => (
-                  <SaleItemCard item={item} />
+                  <SaleItemCard item={item} setItem={setContextUserItemData} />
                 ))}
               </div>
               <div>

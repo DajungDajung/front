@@ -2,10 +2,9 @@ import { useNavigate } from 'react-router-dom';
 import style from './saleItemCard.module.css'
 import { getImage } from '../../utils/getImage';
 import { getDaysAgo } from '../../utils/date';
-import axios from 'axios';
-import { BASE_URL } from '../../api/BASE_URL';
+import { axiosInstance } from '../../api/axiosInstance';
 
-export default function SaleItemCard({ item }) {
+export default function SaleItemCard({ item, setItem }) {
   const navigate = useNavigate();
   const navigateToEachItem = (num) => {
     navigate(`/items/${num}`)
@@ -15,11 +14,15 @@ export default function SaleItemCard({ item }) {
   }
 
   const itemDelete = (num) => {
-    axios.delete(BASE_URL + `/items/${num}`).then((response) => {
-      alert('상품이 삭제되었습니다.');
-    }).catch(err => {
-      alert('오류 발생!');
-    })
+    if (confirm('상품을 삭제하시겠습니까?')) {
+      axiosInstance.delete(`/items/${num}`).then((response) => {
+        setItem(prev => prev.filter(i => i.id !== num));
+        alert('상품이 삭제되었습니다.');
+      }).catch(err => {
+        alert('오류 발생!');
+        console.log(err)
+      })
+    }
   }
   return (
     <div className={style.itemCard}>
