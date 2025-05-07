@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Login.css';
+import { axiosInstance } from '../../api/axiosInstance';
+import { useLoginStore } from '../../store/useAuthStore';
 
 const Login = () => {
+  const isLogined = useLoginStore((state) => state.isLogined);
+  const setLogIn = useLoginStore((state) => state.setLogIn);
   const navigate = useNavigate();
-
   const [form, setForm] = useState({
     email: '',
     password: '',
@@ -24,9 +27,15 @@ const Login = () => {
       return;
     }
 
-    console.log('로그인 정보:', form);
-    alert('로그인 성공! 메인페이지로 이동합니다.');
-    navigate('/dajungdajung');
+    axiosInstance.post('/auth/signin', { email: form.email, password: form.password })
+      .then((res) => {
+        console.log('로그인 정보:', form);
+        setLogIn();
+        alert('로그인 성공! 메인페이지로 이동합니다.');
+        navigate('/dajungdajung');
+      }).catch(err => {
+        console.log(err)
+      })
   };
 
   return (

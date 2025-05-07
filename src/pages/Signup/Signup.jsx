@@ -1,6 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Signup.css';
+import axios from 'axios';
+import { BASE_URL } from '../../api/BASE_URL';
+import { axiosInstance } from '../../api/axiosInstance';
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -26,17 +29,20 @@ const Signup = () => {
       return;
     }
 
-    try {
+    axiosInstance.post('/auth/signup', {
+      email: form.email,
+      contact: form.phone,
+      password: form.password,
+      name: form.name,
+      nickname: form.nickname
+    }).then((response) => {
       console.log('회원가입 요청 준비 완료:', form);
       alert('회원가입이 완료되었습니다');
-
-
       navigate('/login');
-
-    } catch (error) {
-      console.error('회원가입 오류:', error);
-      alert('회원가입에 실패했습니다.');
-    }
+    }).catch(err => {
+      console.log(err);
+      alert('회원가입에 실패했습니다.')
+    })
   };
 
   return (

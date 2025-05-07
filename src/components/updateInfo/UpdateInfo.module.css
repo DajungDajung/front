@@ -9,7 +9,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom : 20px;
+  margin-bottom : 40px;
 }
 
 .imageBox > img{
@@ -35,6 +35,7 @@
   display: flex;
   flex-direction: column;
   align-items :center;
+  margin-top : 40px;
 }
 
 .inputContainer > input, .inputContainer > textarea{
@@ -55,6 +56,13 @@
 
 .inputContainer > input:focus, .inputContainer > textarea:focus{
   outline-color: #ec7fa9;
+}
+
+.inputContainer p{
+  padding-bottom : 8px;
+  font-size : 15px;
+  width : 60%;
+  color : red;
 }
 
 .updateInfoContainer > hr{

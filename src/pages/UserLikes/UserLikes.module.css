@@ -6,3 +6,27 @@
   grid-template-rows : repeat(2, 1fr);
   gap : 20px;
 }
+
+.mainContainer{
+  height : 100vh;
+  display : flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mainContainer p {
+  font-size : 40px;
+  font-weight : bold;
+  color : lightgray;
+}
+
+.mainContainer svg{
+  padding-bottom: 20px;
+  width: 200px;
+  height : 160px;
+  color : lightgray;
+}
+
+.mainContainer > div {
+  text-align: center;
+}

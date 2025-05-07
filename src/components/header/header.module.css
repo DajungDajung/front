@@ -51,5 +51,6 @@
   top: 50%;
   right : 10px;
   transform : translateY(-50%);
+  cursor: pointer;
 }
 /* 돋보기 모양 absolute로 세로 가운데 정렬하기 */
