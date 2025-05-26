@@ -1,8 +1,6 @@
 import axios from 'axios';
 const { VITE_BACK_URL } = import.meta.env
 
-console.log(VITE_BACK_URL)
-
 const axiosInstance = axios.create({
   baseURL: VITE_BACK_URL,
   withCredentials: true,
