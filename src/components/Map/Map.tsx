@@ -34,7 +34,6 @@ function Map() {
   );
 }
 const MapStyle = styled.div` 
-  
   #map{
     position: relative;
     border: 1px solid rgba(100,100,100,0.4);

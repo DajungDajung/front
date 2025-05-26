@@ -47,7 +47,6 @@ const ItemsSearch = () => {
 
     fetchItemSearchData();
     fetchCategoryData();
-    console.log(items);
   }, [q, category]);
 
   return (

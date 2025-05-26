@@ -46,8 +46,8 @@ const ItemDetail = () => {
         console.log(response.data);
         setItem(response.data.item);
         setSeller(response.data.user);
-        setIsLike(response.data.item.liked === "true");
-        setIsSeller(response.data.item.seller === "true");
+        setIsLike(response.data.item.liked === true);
+        setIsSeller(response.data.item.seller === true);
       } catch (error) {
         console.log("상품 상세 조회 에러 : ", error);
       }

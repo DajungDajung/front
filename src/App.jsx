@@ -1,7 +1,5 @@
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import "./App.css";
-import Header from "./components/header/header";
-import Footer from "./components/footer/footer";
 import ItemsCreate from "./pages/items/ItemsCreate";
 import ItemsSearch from "./pages/items/ItemsSearch";
 import ItemsDetail from "./pages/items/ItemsDetail";
@@ -20,40 +18,35 @@ import Unsubscribe from "./pages/unsubscribe/Unsubscribe";
 import UploadItems from "./pages/UploadItems/UploadItems";
 import UserLikes from "./pages/UserLikes/UserLikes";
 import Map from "./components/Map/Map";
+import { DefaultLayout, NonHeaderLayout } from "./components/Layout/Layout";
 
 function App() {
-  const location = useLocation();
-  const noHeaderRoutes = ["/map"];
-  const showHeader = !noHeaderRoutes.includes(location.pathname);
-
   return (
-    <div className="app-wrapper">
-      {showHeader && <Header />}
-      <main className="main-content">
-        <Routes>
-          <Route path="/store/:id" element={<UserInfos />} />
-          <Route path="/items/create" element={<ItemsCreate />} />
-          <Route path="/items" element={<ItemsSearch />} />
-          <Route path="/items/:id" element={<ItemsDetail />} />
-          <Route path="/items/edit/:id" element={<ItemsEdit />} />
-          <Route path="/signin" element={<Signin />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/findid" element={<FindId />} />
-          <Route path="/resetpwd" element={<ResetPwd />} />
-          <Route path="/newpwd" element={<NewPwd />} />
-          <Route path="/" element={<DajungDajung />} />
-          <Route path="/map" element={<Map />} />
-          <Route path="/users" element={<MyPage />}>
-            <Route path="mypage" element={<UserInfo />} />
-            <Route path="mypage/update" element={<UpdateInfo />} />
-            <Route path="unsubscribe" element={<Unsubscribe />} />
-            <Route path="upload" element={<UploadItems />} />
-            <Route path="likes" element={<UserLikes />} />
-          </Route>
-        </Routes>
-      </main>
-      {showHeader && <Footer />}
-    </div>
+    <Routes>
+      <Route element={<DefaultLayout />}>
+        <Route path="/store/:id" element={<UserInfos />} />
+        <Route path="/items/create" element={<ItemsCreate />} />
+        <Route path="/items" element={<ItemsSearch />} />
+        <Route path="/items/:id" element={<ItemsDetail />} />
+        <Route path="/items/edit/:id" element={<ItemsEdit />} />
+        <Route path="/signin" element={<Signin />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/findid" element={<FindId />} />
+        <Route path="/resetpwd" element={<ResetPwd />} />
+        <Route path="/newpwd" element={<NewPwd />} />
+        <Route path="/" element={<DajungDajung />} />
+        <Route path="/users" element={<MyPage />}>
+          <Route path="mypage" element={<UserInfo />} />
+          <Route path="mypage/update" element={<UpdateInfo />} />
+          <Route path="unsubscribe" element={<Unsubscribe />} />
+          <Route path="upload" element={<UploadItems />} />
+          <Route path="likes" element={<UserLikes />} />
+        </Route>
+      </Route>
+      <Route element={<NonHeaderLayout />}>
+        <Route path="/map" element={<Map />} />
+      </Route>
+    </Routes>
   );
 }
 
