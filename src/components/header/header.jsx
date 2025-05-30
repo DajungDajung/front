@@ -1,8 +1,8 @@
 import Logo from '../../assets/Logo.png';
 import searchIcon from '../../assets/searchIcon.png';
-import {useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 import styles from './header.module.css';
-import {Link, useNavigate, useLocation} from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import axiosInstance from '../../api/axiosInstance';
 
 function Header() {
@@ -18,26 +18,30 @@ function Header() {
     setShowDropdown(false);
   }, [location]);
 
-  const handleSearch = e => {
+  const handleSearch = (e) => {
     e.preventDefault();
-    if (searchInput.trim() === '') return;
+    if (searchInput.trim() === '') {
+      return;
+    }
     navigate(`/items?q=${encodeURIComponent(searchInput.trim())}`);
     setSearchInput('');
   };
 
   const handleLogout = () => {
     const confirmLogout = window.confirm('로그아웃 하시겠습니까?');
-    if (!confirmLogout) return;
+    if (!confirmLogout) {
+      return;
+    }
 
     axiosInstance
       .delete('/auth/logout')
-      .then(res => {
+      .then(() => {
         localStorage.removeItem('nickname');
         setNickname('');
         navigate('/');
         console.log('로그아웃 완료');
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
         alert('로그아웃을 실패하였습니다.\n다시 시도해주세요.');
       });
@@ -54,7 +58,7 @@ function Header() {
           <input
             placeholder="검색어를 입력하세요"
             value={searchInput}
-            onChange={e => setSearchInput(e.target.value)}
+            onChange={(e) => setSearchInput(e.target.value)}
           />
           <img
             className={styles.searchIcon}
@@ -65,7 +69,7 @@ function Header() {
         </form>
 
         <div className={styles.navItems}>
-          <Link to="#" className={styles.chating}>
+          <Link to="/chats" className={styles.chating}>
             채팅하기
           </Link>
           <Link to="/items/create" className={styles.selling}>
@@ -75,7 +79,8 @@ function Header() {
           {nickname ? (
             <div
               className={styles.dropdownWrapper}
-              onClick={() => setShowDropdown(!showDropdown)}>
+              onClick={() => setShowDropdown(!showDropdown)}
+            >
               <span className={styles.nickname}>{nickname}</span>
               {showDropdown && (
                 <div className={styles.dropdown}>
@@ -84,7 +89,8 @@ function Header() {
                   </Link>
                   <button
                     className={styles.dropdownItem}
-                    onClick={handleLogout}>
+                    onClick={handleLogout}
+                  >
                     로그아웃
                   </button>
                 </div>

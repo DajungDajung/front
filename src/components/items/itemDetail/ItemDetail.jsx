@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { authRequest } from '../../../api/axiosInstance.js';
 import { getComments } from '../../../api/commentsApi.js';
@@ -25,14 +25,14 @@ const ItemDetail = () => {
     navigate(`/items/edit/${id}`, { state: { item, isEdit: true } });
   }
 
-  const fetchCommentData = async () => {
+  const fetchCommentData = useCallback(async () => {
     try {
       const response = await getComments(id);
-      setComments(response.data);
-    } catch (error) {
-      console.log('댓글 조회 에러 : ', error);
+      setComments(response.data.comments);
+    } catch (err) {
+      console.error('댓글 가져오기 실패:', err);
     }
-  };
+  }, [id]);
 
   useEffect(() => {
     const fetchItemDetailData = async () => {
@@ -50,7 +50,7 @@ const ItemDetail = () => {
 
     fetchItemDetailData();
     fetchCommentData();
-  }, [id]);
+  }, [id, fetchCommentData]);
 
 
   const handleLikeButton = async (item_id) => {

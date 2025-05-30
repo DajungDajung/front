@@ -1,7 +1,5 @@
 import axios from 'axios';
-const { VITE_BACK_URL } = import.meta.env
-
-console.log(VITE_BACK_URL)
+const { VITE_BACK_URL } = import.meta.env;
 
 const axiosInstance = axios.create({
   baseURL: VITE_BACK_URL,
@@ -12,7 +10,7 @@ const axiosInstance = axios.create({
   },
 });
 
-export const authRequest = async ({method, url, data, navigate}) => {
+export const authRequest = async ({ method, url, data, navigate }) => {
   try {
     const response = await axiosInstance({
       method,
@@ -25,7 +23,9 @@ export const authRequest = async ({method, url, data, navigate}) => {
       const goToLogin = window.confirm(
         '로그인이 필요합니다. 로그인하시겠습니까?',
       );
-      if (goToLogin) navigate('/signin');
+      if (goToLogin) {
+        navigate('/signin');
+      }
     }
     throw error;
   }

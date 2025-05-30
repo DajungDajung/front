@@ -1,4 +1,4 @@
-import {Routes, Route} from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import './App.css';
 import Header from './components/header/header';
 import Footer from './components/footer/footer';
@@ -22,7 +22,8 @@ import UpdateInfo from './components/updateInfo/UpdateInfo';
 import Unsubscribe from './pages/unsubscribe/Unsubscribe';
 import UploadItems from './pages/UploadItems/UploadItems';
 import UserLikes from './pages/UserLikes/UserLikes';
-import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
+import Chat from './pages/Chat/Chat';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const queryClient = new QueryClient();
 
@@ -51,6 +52,7 @@ function App() {
               <Route path="upload" element={<UploadItems />} />
               <Route path="likes" element={<UserLikes />} />
             </Route>
+            <Route path="/chats" element={<Chat />} />
           </Routes>
         </QueryClientProvider>
       </main>
