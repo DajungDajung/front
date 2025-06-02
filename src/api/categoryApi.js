@@ -1,3 +1,3 @@
-import axiosInstance from "./axiosInstance";
+import axiosInstance from './axiosInstance';
 
-export const getCategories = () => axiosInstance.get('/category');
+export const getCategories = () => axiosInstance.get('/categories');

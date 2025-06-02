@@ -39,6 +39,7 @@ function App() {
         <Route path="/resetpwd" element={<ResetPwd />} />
         <Route path="/newpwd" element={<NewPwd />} />
         <Route path="/" element={<DajungDajung />} />
+        <Route path="/chat" element={<Chat />} />
         <Route path="/users" element={<MyPage />}>
           <Route path="mypage" element={<UserInfo />} />
           <Route path="mypage/update" element={<UpdateInfo />} />
@@ -46,10 +47,9 @@ function App() {
           <Route path="upload" element={<UploadItems />} />
           <Route path="likes" element={<UserLikes />} />
         </Route>
-        <Route path="/chat" element={<Chat />} />
-        <Route element={<NonHeaderLayout />}>
-          <Route path="/map" element={<Map />} />
-        </Route>
+      </Route>
+      <Route element={<NonHeaderLayout />}>
+        <Route path="/map" element={<Map />} />
       </Route>
     </Routes>
   );

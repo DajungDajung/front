@@ -1,5 +1,5 @@
 import axios from 'axios';
-const {VITE_BACK_URL} = import.meta.env;
+const { VITE_BACK_URL } = import.meta.env;
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -18,7 +18,7 @@ export const fetchProductList = async () => {
 
   const data = Array.isArray(response.data) ? response.data : [];
 
-  return data.map(item => ({
+  return data.map((item) => ({
     id: item.id,
     name: item.title,
     img: item.img_id,

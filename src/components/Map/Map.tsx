@@ -33,7 +33,8 @@ function Map() {
     </MapStyle>
   );
 }
-const MapStyle = styled.div` 
+const MapStyle = styled.div`
+  padding: 2.5vw;
   #map{
     position: relative;
     border: 1px solid rgba(100,100,100,0.4);

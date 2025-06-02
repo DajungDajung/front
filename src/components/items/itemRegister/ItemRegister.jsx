@@ -1,12 +1,12 @@
-import React, { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { authRequest } from "../../../api/axiosInstance";
-import { getCategories } from "../../../api/categoryApi";
-import SampleImg from "../../../assets/sampleImg.svg";
-import { formatNumber } from "../../../utils/format";
-import "./ItemRegister.css";
+import React, { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { authRequest } from '../../../api/axiosInstance';
+import { getCategories } from '../../../api/categoryApi';
+import SampleImg from '../../../assets/sampleImg.svg';
+import { formatNumber } from '../../../utils/format';
+import './ItemRegister.css';
 
-const onlyNumber = (str) => str.replace(/[^0-9]/g, "");
+const onlyNumber = (str) => str.replace(/[^0-9]/g, '');
 
 const ItemRegister = ({ isEdit = false, item = null }) => {
   const fileInputRef = useRef(null);
@@ -14,11 +14,11 @@ const ItemRegister = ({ isEdit = false, item = null }) => {
 
   const [preview, setPreview] = useState(SampleImg);
   const [form, setForm] = useState({
-    title: "",
-    category: "",
-    price: "",
-    contents: "",
-    placetitle: "",
+    title: '',
+    category: '',
+    price: '',
+    contents: '',
+    placetitle: '',
   });
   const [categories, setCategories] = useState([]);
 
@@ -28,7 +28,7 @@ const ItemRegister = ({ isEdit = false, item = null }) => {
         const response = await getCategories();
         setCategories(response.data);
       } catch (error) {
-        console.log("카테고리 조회 에러 : ", error);
+        console.log('카테고리 조회 에러 : ', error);
       }
     };
 
@@ -36,11 +36,11 @@ const ItemRegister = ({ isEdit = false, item = null }) => {
 
     if (isEdit && item) {
       setForm({
-        title: item.title || "",
-        category: item.category_id || "",
-        price: item.price ? formatNumber(item.price) : "",
-        contents: item.contents || "",
-        placetitle: item.placetitle || "",
+        title: item.title || '',
+        category: item.category_id || '',
+        price: item.price ? formatNumber(item.price) : '',
+        contents: item.contents || '',
+        placetitle: item.placetitle || '',
       });
       if (item.imageUrl) {
         setPreview(item.imageUrl);
@@ -63,7 +63,7 @@ const ItemRegister = ({ isEdit = false, item = null }) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    if (name === "price") {
+    if (name === 'price') {
       const onlyNums = onlyNumber(value);
       setForm((prev) => ({
         ...prev,
@@ -78,7 +78,7 @@ const ItemRegister = ({ isEdit = false, item = null }) => {
   };
 
   const handleSelectPlace = () => {
-    window.open("/map", "mapSelectPopup", "width=600,height=800");
+    window.open('/map', 'mapSelectPopup', 'width=600,height=800');
   };
 
   const handleSubmit = async () => {
@@ -94,36 +94,36 @@ const ItemRegister = ({ isEdit = false, item = null }) => {
       try {
         console.log(dataToSubmit);
         await authRequest({
-          method: "put",
+          method: 'put',
           url: `/items/${item.id}`,
           data: dataToSubmit,
           navigate,
         });
-        alert("상품이 수정되었습니다!");
+        alert('상품이 수정되었습니다!');
         navigate(`/items/${item.id}`);
       } catch (error) {
-        console.log("상품 수정 오류 : ", error);
+        console.log('상품 수정 오류 : ', error);
       }
     } else {
       try {
         console.log(dataToSubmit);
         const response = await authRequest({
-          method: "post",
+          method: 'post',
           url: `/items`,
           data: dataToSubmit,
           navigate,
         });
-        alert("상품이 등록되었습니다!");
+        alert('상품이 등록되었습니다!');
         navigate(`/items/${response.insertId}`);
       } catch (error) {
-        console.log("상품 등록 오류 : ", error);
+        console.log('상품 등록 오류 : ', error);
       }
     }
   };
 
   return (
     <div className="item_create_container">
-      <h1 className="sell_title">{isEdit ? "수정하기" : "판매하기"}</h1>
+      <h1 className="sell_title">{isEdit ? '수정하기' : '판매하기'}</h1>
 
       <section className="item_img_upload">
         <img src={preview}></img>
@@ -137,7 +137,7 @@ const ItemRegister = ({ isEdit = false, item = null }) => {
         <input
           type="file"
           accept="image/*"
-          style={{ display: "none" }}
+          style={{ display: 'none' }}
           ref={fileInputRef}
           onChange={handleFileChange}
         />
@@ -196,7 +196,7 @@ const ItemRegister = ({ isEdit = false, item = null }) => {
           </div>
         </div>
       </section>
-      <div style={{ display: "flex", justifyContent: "center" }}>
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
         <button className="item_create_btn" onClick={handleSubmit}>
           작성 완료
         </button>
