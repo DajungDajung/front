@@ -8,7 +8,7 @@ const queryClient = new QueryClient();
 
 export function DefaultLayout() {
   return (
-    <DefaultLayoutStyle className="app-wrapper">
+    <DefaultLayoutStyle>
       <Header />
       <main className="main-content">
         <QueryClientProvider client={queryClient}>

@@ -3,16 +3,16 @@ import ItemRegister from '../../components/items/itemRegister/ItemRegister';
 import { useLocation } from 'react-router-dom';
 
 const ItemsEdit = () => {
-    const location = useLocation();
-    const { item, isEdit } = location.state || {};
+  const location = useLocation();
+  const { item, isEdit } = location.state || {};
 
-    console.log(item);
+  console.log(item);
 
-    return (
-        <>
-        <ItemRegister isEdit={isEdit} item={item}/>
-        </>
-    )
-}
+  return (
+    <>
+      <ItemRegister isEdit={isEdit} item={item} />
+    </>
+  );
+};
 
 export default ItemsEdit;
