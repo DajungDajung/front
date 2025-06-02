@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import React, {useState} from 'react';
+import {useNavigate, useLocation} from 'react-router-dom';
 import axios from 'axios';
 import './NewPwd.css';
 const {VITE_BACK_URL} = import.meta.env
@@ -14,12 +14,12 @@ const NewPwd = () => {
     confirmPassword: '',
   });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+  const handleChange = e => {
+    const {name, value} = e.target;
+    setForm(prev => ({...prev, [name]: value}));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault();
 
     if (form.newPassword !== form.confirmPassword) {
@@ -43,7 +43,7 @@ const NewPwd = () => {
         },
         {
           withCredentials: true,
-        }
+        },
       );
 
       console.log('비밀번호 변경 성공:', response.data);

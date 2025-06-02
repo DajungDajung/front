@@ -1,148 +1,82 @@
+@import 'tailwindcss';
+@tailwind utilities;
+
 .dajung-container {
-  max-width: 1240px;
-  margin: 0 auto;
-  padding-top: 160px;
-  padding-bottom: 80px;
-  box-sizing: border-box;
+  @apply max-w-[77.50rem] my-0 m-auto pt-40 pb-20 box-border;
 }
 
 .banner-box {
-  width: 1380px;
-  height: 260px;
-  margin-top: -70px;
-  margin-left: -60px;
-  border-radius: 8px;
-  overflow: hidden;
+  @apply w-[86.25rem] h-64 -mt-16 -ml-16 rounded-lg overflow-hidden;
 }
 
 .banner-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover; 
-  border-radius: 8px;
+  @apply w-full h-full object-cover rounded-lg;
 }
 
 .product-section {
-  margin-top: 60px;
-  padding: 0 10px;
-  width: 100%;
-  margin-bottom: 100px;
+  @apply mt-16 py-0 px-2 w-full mb-24;
 }
 
 .section-title {
-  font-size: 20px;
-  font-weight: bold;
-  margin-bottom: 30px;
-  margin-left:-60px;
+  @apply text-xl font-bold mb-8 -ml-16;
 }
 
 .product-grid {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  grid-template-rows : repeat(2, 300px);
-  gap: 30px;
-  justify-content: center;
+  @apply grid grid-cols-[repeat(6,_1fr)] grid-rows-[repeat(2,_300px)] gap-[1.88rem] justify-center;
 }
 
 .product-card {
-  width: 200px;
-  height: auto;
-  display: flex;
-  flex-direction: column;
-  background: white;
-  border: 1px solid #F2F2F2;
-  border-radius: 5px;
-  overflow: hidden;
+  @apply w-50 h-auto flex flex-col bg-white border border-gray-200 rounded overflow-hidden;
 }
 
 .product-card:hover {
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-  cursor: pointer;
+  @apply cursor-pointer;
 }
 
 .product-card-link {
-  text-decoration: none;
-  color: inherit;
+  @apply text-inherit;
 }
 
 .card-image {
-  width: 100%;
-  height: 220px;
-  object-fit: cover;
-  border-bottom: 1px solid #eee;
+  @apply w-full h-56 object-cover border-b border-gray-200;
 }
 
 .card-info {
-  padding: 10px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+  @apply p-3 flex flex-col gap-[0.38rem];
 }
 
 .card-name {
-  font-size: 16px;
-  font-weight: 300;
-  color: black;
-  overflow : hidden;
-  text-overflow : ellipsis;
-  display : -webkit-box;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient : vertical;
+  @apply text-base font-light text-black overflow-hidden text-ellipsis line-clamp-1;
 }
 
 .card-bottom {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  @apply flex justify-between items-center;
 }
 
 .card-price {
-  font-size: 16px;
-  font-weight: 600;
-  color: black;
+  @apply text-base font-semibold text-black;
 }
 
 .card-time {
-  font-size: 14px;
-  font-weight: 400;
-  color: rgba(0, 0, 0, 0.2);
+  @apply text-sm font-normal text-black/[0.2];
 }
 
 .pagination {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top:140px;
-  margin-bottom:-140px;
-  gap: 14px;
+  @apply flex justify-center items-center mt-36 -mb-36 gap-[0.88rem];
 }
 
 .page-number {
-  background: none;
-  border: none;
-  font-size: 18px;
-  font-weight: 400;
-  font-family: 'Pretendard', sans-serif;
-  color: #666;
-  cursor: pointer;
+  @apply text-lg font-normal text-[#666] cursor-pointer;
 }
 
 .page-number.active {
-  font-weight: 600;
-  color: black;
+  @apply font-semibold text-black;
 }
 
 .arrow {
-  width: 24px;
-  height: 24px;
-  border: none;
-  background-color: #ffffff;
-  color: black;
-  font-size: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  padding: 0;
-  border-radius: 4px;
+  @apply w-6 h-6 bg-[#ffffff] text-black text-base flex items-center justify-center cursor-pointer p-0 rounded;
+}
+
+.hasMore-Container {
+  @apply flex justify-center items-center my-8 mx-0 text-center text-xl font-bold;
 }

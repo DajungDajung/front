@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from "react";
-import "./ItemsSearch.css";
-import { useLocation } from "react-router-dom";
-import Category from "../../components/items/category/Category";
-import Item from "../../components/items/item/Item";
-import { getSearchItems } from "../../api/itemsApi";
-import { getCategories } from "../../api/categoryApi";
+import React, { useEffect, useState } from 'react';
+import './ItemsSearch.css';
+import { useLocation } from 'react-router-dom';
+import Category from '../../components/items/category/Category';
+import Item from '../../components/items/item/Item';
+import { getSearchItems } from '../../api/itemsApi';
+import { getCategories } from '../../api/categoryApi';
 
 const ItemsSearch = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
 
-  const q = queryParams.get("q");
-  const category = queryParams.get("category");
+  const q = queryParams.get('q');
+  const category = queryParams.get('category');
 
   const [items, setItems] = useState([]);
   const [isEmpty, setIsEmpty] = useState(true);
@@ -19,8 +19,8 @@ const ItemsSearch = () => {
 
   useEffect(() => {
     const params = new URLSearchParams();
-    if (q) params.append("q", q);
-    if (category) params.append("category", category);
+    if (q) params.append('q', q);
+    if (category) params.append('category', category);
 
     const fetchItemSearchData = async () => {
       try {
@@ -30,7 +30,7 @@ const ItemsSearch = () => {
         setIsEmpty(response.data.length === 0);
         console.log(response);
       } catch (error) {
-        console.error("상품 검색 에러 : ", error);
+        console.error('상품 검색 에러 : ', error);
         setItems([]);
         setIsEmpty(true);
       }
@@ -41,7 +41,7 @@ const ItemsSearch = () => {
         const response = await getCategories();
         setCategories(response.data);
       } catch (error) {
-        console.error(error);
+        console.log('카테고리 목록 조회 에러: ', error);
       }
     };
 

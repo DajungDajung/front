@@ -1,3 +1,3 @@
-import axiosInstance from "./axiosInstance";
+import axiosInstance from './axiosInstance';
 
-export const getComments = (id) => axiosInstance.get(`/comments/${id}`);
+export const getComments = id => axiosInstance.get(`/comments/${id}`);

@@ -1,14 +1,19 @@
-import styled from "styled-components";
-import { Outlet } from "react-router-dom";
-import Footer from "../footer/footer";
-import Header from "../header/header";
+import styled from 'styled-components';
+import { Outlet } from 'react-router-dom';
+import Footer from '../footer/footer';
+import Header from '../header/header';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+const queryClient = new QueryClient();
 
 export function DefaultLayout() {
   return (
     <DefaultLayoutStyle className="app-wrapper">
       <Header />
       <main className="main-content">
-        <Outlet />
+        <QueryClientProvider client={queryClient}>
+          <Outlet />
+        </QueryClientProvider>
       </main>
       <Footer />
     </DefaultLayoutStyle>

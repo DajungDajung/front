@@ -1,17 +1,16 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { authRequest } from "../../../api/axiosInstance.js";
-import { getComments } from "../../../api/commentsApi.js";
-import { deleteItem, getItemDetail } from "../../../api/itemsApi.js";
-import likeIcon from "../../../assets/ic_like.svg";
-import unLikeIcon from "../../../assets/ic_unlike.svg";
-import sampleImg from "../../../assets/sampleImg.svg";
-import { getDaysAgo } from "../../../utils/date";
-import { formatNumber } from "../../../utils/format";
-import { getImgSrc } from "../../../utils/image.js";
-import Comments from "../comments/Comments";
-import "./ItemDetail.css";
-import useKakaoMap from "../../../hooks/useKakaoMap.js";
+import React, { useCallback, useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { authRequest } from '../../../api/axiosInstance.js';
+import { getComments } from '../../../api/commentsApi.js';
+import { deleteItem, getItemDetail } from '../../../api/itemsApi.js';
+import likeIcon from '../../../assets/ic_like.svg';
+import unLikeIcon from '../../../assets/ic_unlike.svg';
+import sampleImg from '../../../assets/sampleImg.svg';
+import { getDaysAgo } from '../../../utils/date';
+import { formatNumber } from '../../../utils/format';
+import { getImgSrc } from '../../../utils/image.js';
+import Comments from '../comments/Comments';
+import './ItemDetail.css';
 
 const ItemDetail = () => {
   const navigate = useNavigate();
@@ -21,7 +20,7 @@ const ItemDetail = () => {
   const [isLike, setIsLike] = useState(false);
   const [isSeller, setIsSeller] = useState(false);
   const [comments, setComments] = useState([]);
-  const { address } = useKakaoMap("mini_map", {
+  const { address } = useKakaoMap('mini_map', {
     lat: 33.4507,
     lng: 126.5707,
   });
@@ -30,14 +29,14 @@ const ItemDetail = () => {
     navigate(`/items/edit/${id}`, { state: { item, isEdit: true } });
   };
 
-  const fetchCommentData = async () => {
+  const fetchCommentData = useCallback(async () => {
     try {
       const response = await getComments(id);
-      setComments(response.data);
-    } catch (error) {
-      console.log("댓글 조회 에러 : ", error);
+      setComments(response.data.comments);
+    } catch (err) {
+      console.error('댓글 가져오기 실패:', err);
     }
-  };
+  }, [id]);
 
   useEffect(() => {
     const fetchItemDetailData = async () => {
@@ -49,17 +48,17 @@ const ItemDetail = () => {
         setIsLike(response.data.item.liked === true);
         setIsSeller(response.data.item.seller === true);
       } catch (error) {
-        console.log("상품 상세 조회 에러 : ", error);
+        console.log('상품 상세 조회 에러 : ', error);
       }
     };
 
     fetchItemDetailData();
     fetchCommentData();
-  }, [id]);
+  }, [id, fetchCommentData]);
 
   const handleLikeButton = async (item_id) => {
     try {
-      const method = isLike ? "delete" : "post";
+      const method = isLike ? 'delete' : 'post';
       const url = `/users/likes/${item_id}`;
       await authRequest({ method, url, navigate });
       setIsLike(!isLike);
@@ -69,19 +68,19 @@ const ItemDetail = () => {
         like: isLike ? prev.like - 1 : prev.like + 1,
       }));
     } catch (error) {
-      console.log("좋아요 처리 에러:", error.response?.data || error.message);
+      console.log('좋아요 처리 에러:', error.response?.data || error.message);
     }
   };
 
   const handleDelete = async (id) => {
     try {
-      const doDelete = window.confirm("상품을 삭제하시겠습니까?");
+      const doDelete = window.confirm('상품을 삭제하시겠습니까?');
       if (doDelete) {
         await deleteItem(id);
-        navigate("/");
+        navigate('/');
       }
     } catch (error) {
-      console.log("상품 삭제 에러 : ", error);
+      console.log('상품 삭제 에러 : ', error);
     }
   };
 
@@ -118,10 +117,10 @@ const ItemDetail = () => {
           <p className="item_detail_category">{item.category}</p>
           <p className="item_detail_title">{item.title}</p>
           <p className="item_detail_price">
-            {item?.price ? formatNumber(item.price) + "원" : ""}
+            {item?.price ? formatNumber(item.price) + '원' : ''}
           </p>
           <p className="item_detail_date">
-            {item?.create_at ? getDaysAgo(item.create_at) : ""}
+            {item?.create_at ? getDaysAgo(item.create_at) : ''}
           </p>
           <p className="item_detail_info">{item.contents}</p>
 
