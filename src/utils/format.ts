@@ -5,6 +5,10 @@ export function formatNumber(number: number): string {
 export function formatDate(dateStr: string): string {
   const date = new Date(dateStr);
 
+  if (isNaN(date.getTime())) {
+    throw new Error('Invalid Date');
+  }
+
   const yy = String(date.getFullYear()).slice(2); // '25'
   const mm = String(date.getMonth() + 1).padStart(2, '0'); // '05'
   const dd = String(date.getDate()).padStart(2, '0'); // '28'
