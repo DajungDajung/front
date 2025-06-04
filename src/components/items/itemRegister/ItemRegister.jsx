@@ -18,7 +18,7 @@ const ItemRegister = ({ isEdit = false, item = null }) => {
     category: '',
     price: '',
     contents: '',
-    placetitle: '',
+    place: '',
   });
   const [categories, setCategories] = useState([]);
 
@@ -40,7 +40,7 @@ const ItemRegister = ({ isEdit = false, item = null }) => {
         category: item.category_id || '',
         price: item.price ? formatNumber(item.price) : '',
         contents: item.contents || '',
-        placetitle: item.placetitle || '',
+        place: item.place || '',
       });
       if (item.imageUrl) {
         setPreview(item.imageUrl);
@@ -109,7 +109,7 @@ const ItemRegister = ({ isEdit = false, item = null }) => {
         console.log(dataToSubmit);
         const response = await authRequest({
           method: 'post',
-          url: `/items`,
+          url: '/items',
           data: dataToSubmit,
           navigate,
         });
@@ -179,16 +179,20 @@ const ItemRegister = ({ isEdit = false, item = null }) => {
           onChange={handleChange}
         />
         <div className="inline-flex items-center">
-          <label className="min-w-1/6 text-[18px] pl-[2vw]" for="place">
+          <label className="min-w-1/6 text-[18px] text-center" htmlFor="place">
             약속 장소
           </label>
-          <div
-            type="place"
-            className="w-[100%] h-[60px] rounded-[10px] border-[1px] border-solid border-gray-300 pt-3 pb-3 inline-flex items-center justify-between text-center"
-          >
-            <p className="pl-3">{form.placetitle}</p>
+          <div className="w-[100%] h-[60px] rounded-[10px] border-[1px] border-solid border-gray-300 py-3 inline-flex items-center justify-between text-center">
+            <input
+              type="text"
+              id="place"
+              className="pl-3 w-[80%]"
+              disabled
+              placeholder="약속장소를 선택해주세요"
+              value={form.place}
+            />
             <a
-              className="min-w-1/6 flex items-center border-l-gray-200 border-l-2 p-3 justify-center cursor-pointer"
+              className="min-w-1/6 flex items-center border-l-gray-200 border-l-2 p-3 justify-center cursor-pointer text-gray-400 hover:text-black"
               onClick={handleSelectPlace}
             >
               Map

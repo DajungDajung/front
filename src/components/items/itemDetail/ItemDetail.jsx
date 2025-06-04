@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { authRequest } from '../../../api/axiosInstance.js';
 import { getComments } from '../../../api/commentsApi.js';
@@ -10,6 +10,8 @@ import { getDaysAgo } from '../../../utils/date';
 import { formatNumber } from '../../../utils/format';
 import { getImgSrc } from '../../../utils/image.js';
 import Comments from '../comments/Comments';
+import useKakaoMap from '../../../hooks/useKakaoMap';
+import pointer from '../../../assets/pointer.svg';
 import './ItemDetail.css';
 
 const ItemDetail = () => {
@@ -20,6 +22,7 @@ const ItemDetail = () => {
   const [isLike, setIsLike] = useState(false);
   const [isSeller, setIsSeller] = useState(false);
   const [comments, setComments] = useState([]);
+  const [isMoreInfo, setIsMoreInfo] = useState(false);
   const { address } = useKakaoMap('mini_map', {
     lat: 33.4507,
     lng: 126.5707,
@@ -32,7 +35,7 @@ const ItemDetail = () => {
   const fetchCommentData = useCallback(async () => {
     try {
       const response = await getComments(id);
-      setComments(response.data.comments);
+      setComments(response.data);
     } catch (err) {
       console.error('댓글 가져오기 실패:', err);
     }
@@ -42,11 +45,15 @@ const ItemDetail = () => {
     const fetchItemDetailData = async () => {
       try {
         const response = await getItemDetail(id);
-        console.log(response.data);
-        setItem(response.data.item);
+        const itemData = {
+          ...response.data.item,
+          liked: response.data.item.liked === 'true',
+          seller: response.data.item.seller === 'true',
+        };
+        setItem(itemData);
         setSeller(response.data.user);
-        setIsLike(response.data.item.liked === true);
-        setIsSeller(response.data.item.seller === true);
+        setIsLike(itemData.liked);
+        setIsSeller(itemData.seller);
       } catch (error) {
         console.log('상품 상세 조회 에러 : ', error);
       }
@@ -84,6 +91,10 @@ const ItemDetail = () => {
     }
   };
 
+  const handleMoreInfo = () => {
+    setIsMoreInfo(!isMoreInfo);
+  };
+
   return (
     <>
       <div className="item_detail_container">
@@ -100,7 +111,7 @@ const ItemDetail = () => {
                 src={getImgSrc(seller.image)}
                 alt="Item"
                 width={64}
-                style={{ borderRadius: `100px` }}
+                style={{ borderRadius: '100px' }}
               />
               <p>{seller.seller}</p>
             </div>
@@ -122,7 +133,12 @@ const ItemDetail = () => {
           <p className="item_detail_date">
             {item?.create_at ? getDaysAgo(item.create_at) : ''}
           </p>
-          <p className="item_detail_info">{item.contents}</p>
+          <p className={`item_detail_info ${isMoreInfo ? '' : 'line-clamp-3'}`}>
+            {item.contents}
+            <a className="" onClick={handleMoreInfo}>
+              더보기
+            </a>
+          </p>
 
           <div className="item_detail_btns_container">
             <button
@@ -163,8 +179,14 @@ const ItemDetail = () => {
             <div
               className="border-[1px] rounded-xl border-gray-300 w-full h-52"
               id="mini_map"
-            />
-            <div>{address}</div>
+            >
+              <img
+                className=" absolute top-[50%] left-[50%] transfrom -translate-x-1/2 -translate-y-7 pointer-none: z-20 h-7"
+                src={pointer}
+                alt="pointer"
+              />
+            </div>
+            <p>{address}</p>
           </div>
         </div>
       </div>
