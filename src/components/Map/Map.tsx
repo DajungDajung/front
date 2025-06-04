@@ -7,9 +7,9 @@ function Map() {
   const [pointer, _setPointer] = useState(point);
   const [latitude, setLatitude] = useState(33.4507);
   const [longitude, setLongitude] = useState(126.5707);
-  const { mapRef, roadAddress, address } = useKakaoMap('map', {
-    lat: latitude,
-    lng: longitude,
+  const { mapRef, roadAddress, address } = useKakaoMap({
+    containerId: 'map',
+    initialCenter: { lat: latitude, lng: longitude },
   });
 
   useEffect(() => {

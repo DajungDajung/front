@@ -23,9 +23,13 @@ const ItemDetail = () => {
   const [isSeller, setIsSeller] = useState(false);
   const [comments, setComments] = useState([]);
   const [isMoreInfo, setIsMoreInfo] = useState(false);
-  const { address } = useKakaoMap('mini_map', {
-    lat: 33.4507,
-    lng: 126.5707,
+  const { address } = useKakaoMap({
+    containerId: 'mini_map',
+    initialCenter: { lat: 37.5665, lng: 126.978 },
+    options: {
+      disableUI: true,
+      fixedMap: true,
+    },
   });
 
   const handleEdit = (id) => {
@@ -177,11 +181,11 @@ const ItemDetail = () => {
               </button>
             )}
             <div
-              className="border-[1px] rounded-xl border-gray-300 w-full h-52"
+              className="border-[1px] rounded-xl border-gray-300 w-full h-52 object-center relative"
               id="mini_map"
             >
               <img
-                className=" absolute top-[50%] left-[50%] transfrom -translate-x-1/2 -translate-y-7 pointer-none: z-20 h-7"
+                className=" absolute top-[50%] left-[50%] transfrom -translate-x-1/2 -translate-y-7 pointer-events-none z-20 h-7"
                 src={pointer}
                 alt="pointer"
               />
