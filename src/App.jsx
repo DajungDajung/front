@@ -19,6 +19,8 @@ import UpdateInfo from './components/updateInfo/UpdateInfo';
 import Unsubscribe from './pages/unsubscribe/Unsubscribe';
 import UploadItems from './pages/UploadItems/UploadItems';
 import UserLikes from './pages/UserLikes/UserLikes';
+import EmailVerify from './pages/EmailVerify/EmailVerify';
+import OAuthCallback from './pages/OAuthCallback/OAuthCallback';
 
 function App() {
   return (
@@ -33,6 +35,8 @@ function App() {
           <Route path="/items/edit/:id" element={<ItemsEdit />} />
           <Route path="/signin" element={<Signin />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/emailVerify" element={<EmailVerify />} />
+          <Route path="/oauthcallback" element={<OAuthCallback />} />
           <Route path="/findid" element={<FindId />} />
           <Route path="/resetpwd" element={<ResetPwd />} />
           <Route path="/newpwd" element={<NewPwd />} />
