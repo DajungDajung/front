@@ -1,13 +1,13 @@
-import {useState, useEffect, useRef} from 'react';
-import {Link} from 'react-router-dom';
+import { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 
 import './DajungDajung.css';
 import banner1 from '../../assets/banner1.png';
 import banner2 from '../../assets/banner2.png';
-import {getImgSrc} from '../../utils/image';
-import {ProductProps} from '../../types/product.model';
-import {useQuery} from '@tanstack/react-query';
-import {fetchProductList} from '../../api/productApi';
+import { getImgSrc } from '../../utils/image';
+import { ProductProps } from '../../types/product.model';
+import { useQuery } from '@tanstack/react-query';
+import { fetchProductList } from '../../api/productApi';
 
 const bannerImages = [banner1, banner2];
 const ITEMS_PER_PAGE = 12;
@@ -20,14 +20,14 @@ const DajungDajung = () => {
   const [isLoading, setIsLoading] = useState(false);
   const observerRef = useRef<HTMLDivElement | null>(null);
 
-  const {data: products = [], isLoading: isQueryLoading} = useQuery({
+  const { data: products = [], isLoading: isQueryLoading } = useQuery({
     queryKey: ['getProduct'],
     queryFn: fetchProductList,
   });
 
   // 위치가 하단 시 호출
   useEffect(() => {
-    const observer = new IntersectionObserver(entries => {
+    const observer = new IntersectionObserver((entries) => {
       if (entries[0].isIntersecting && hasMore) {
         loadMoreItems();
       }
@@ -38,14 +38,16 @@ const DajungDajung = () => {
     }
 
     return () => {
-      if (observerRef.current) observer.unobserve(observerRef.current);
+      if (observerRef.current) {
+        observer.unobserve(observerRef.current);
+      }
       observer.disconnect();
     };
   }, [hasMore, showProducts]);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setBannerIndex(prev => (prev + 1) % bannerImages.length);
+      setBannerIndex((prev) => (prev + 1) % bannerImages.length);
     }, 4000);
     return () => clearInterval(interval);
   }, []);
@@ -65,7 +67,9 @@ const DajungDajung = () => {
 
   // 다음 데이터
   const loadMoreItems = () => {
-    if (isLoading || isQueryLoading) return;
+    if (isLoading || isQueryLoading) {
+      return;
+    }
     setIsLoading(true);
 
     const start = (currentPage - 1) * ITEMS_PER_PAGE;
@@ -78,8 +82,8 @@ const DajungDajung = () => {
       return;
     }
 
-    setShowProducts(prev => [...prev, ...nextItems]);
-    setCurrentPage(prev => prev + 1);
+    setShowProducts((prev) => [...prev, ...nextItems]);
+    setCurrentPage((prev) => prev + 1);
     setHasMore(end < products.length);
     setIsLoading(false);
   };
@@ -92,7 +96,7 @@ const DajungDajung = () => {
             src={bannerImages[bannerIndex]}
             alt="배너 이미지"
             className="banner-img"
-            style={{cursor: 'pointer'}}
+            style={{ cursor: 'pointer' }}
           />
         </Link>
       </div>
@@ -102,11 +106,12 @@ const DajungDajung = () => {
 
         <div className="product-grid">
           {showProducts.length > 0 ? (
-            showProducts.map(item => (
+            showProducts.map((item) => (
               <Link
                 key={item.id}
                 to={`/items/${item.id}`} // 프론트 상세 페이지로 이동
-                className="product-card-link">
+                className="product-card-link"
+              >
                 <div className="product-card">
                   <img
                     className="card-image"
