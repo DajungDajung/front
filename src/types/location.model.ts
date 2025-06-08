@@ -4,8 +4,7 @@ export interface Coordination {
 }
 
 export interface Location extends Coordination {
-  userId: number;
-  itemId: number;
+  id: number;
   title: string;
   address: string;
 }

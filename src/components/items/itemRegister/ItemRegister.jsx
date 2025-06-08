@@ -1,17 +1,25 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { authRequest } from '../../../api/axiosInstance';
+import axiosInstance from '../../../api/axiosInstance';
 import { getCategories } from '../../../api/categoryApi';
 import SampleImg from '../../../assets/sampleImg.svg';
 import { formatNumber } from '../../../utils/format';
 import { CiMap } from 'react-icons/ci';
 import './ItemRegister.css';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 const onlyNumber = (str) => str.replace(/[^0-9]/g, '');
 
 const ItemRegister = ({ isEdit = false, item = null }) => {
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
+
+  const { data: categories = [] } = useQuery({
+    queryKey: ['categories'],
+    queryFn: () => getCategories().then((res) => res.data),
+    staleTime: 1000 * 60 * 60 * 24,
+    refetchOnWindowFocus: false,
+  });
 
   const [preview, setPreview] = useState(SampleImg);
   const [form, setForm] = useState({
@@ -20,55 +28,91 @@ const ItemRegister = ({ isEdit = false, item = null }) => {
     price: '',
     contents: '',
   });
-  const [categories, setCategories] = useState([]);
-  const [place, setPlace] = useState({
+  const [location, setLocation] = useState({
     id: 0,
     title: '',
     address: '',
-    coordinatex: 0,
-    coordinatey: 0,
+    coordinateX: 0,
+    coordinateY: 0,
+  });
+
+  const QueryClient = useQueryClient();
+  const createLocation = useMutation({
+    mutationFn: (payload) =>
+      axiosInstance.post('/location', payload).then((res) => res.data),
+    onSuccess: (data) => {
+      setLocation((prev) => ({
+        ...prev,
+        id: data.insertId,
+        title: data.title || prev.title,
+      }));
+      QueryClient.invalidateQueries(['locations']);
+    },
+  });
+
+  const itemMutation = useMutation({
+    mutationFn: (data) => {
+      const url = isEdit ? `/items/${item.id}` : '/items';
+      const method = isEdit ? 'put' : 'post';
+      return axiosInstance({ method, url, data }).then((res) => res.data);
+    },
+    onSuccess: (responseData) => {
+      alert(isEdit ? '상품이 수정되었습니다!' : '상품이 등록되었습니다');
+      QueryClient.invalidateQueries('items');
+      navigate(
+        isEdit ? `/items/${item.id}` : `/items/${responseData.insertId}`,
+      );
+    },
   });
 
   useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await getCategories();
-        setCategories(response.data);
-      } catch (error) {
-        console.log('카테고리 조회 에러 : ', error);
+    const handler = (event) => {
+      if (event.origin !== window.origin) {
+        return;
+      }
+      const { title, address, coords } = event.data;
+      if (title && address && coords) {
+        createLocation.mutate({
+          title: title,
+          address,
+          coordinateX: coords.lat,
+          coordinateY: coords.lng,
+        });
       }
     };
+    window.addEventListener('message', handler);
+    return () => window.removeEventListener('message', handler);
+  }, [createLocation]);
 
-    fetchCategories();
-
+  useEffect(() => {
     if (isEdit && item) {
       setForm({
-        title: item.title || '',
-        category: item.category_id || '',
-        price: item.price ? formatNumber(item.price) : '',
-        contents: item.contents || '',
+        title: item.title,
+        category: item.category_id,
+        price: formatNumber(item.price.toString()),
+        contents: item.contents,
       });
-      setPlace({
-        title: item.location?.title || '',
-        address: item.location?.address || '',
-        coordinatex: item.location?.coordinatex || 0,
-        coordinatey: item.location?.coordinatey || 0,
-      });
-      if (item.imageUrl) {
-        setPreview(item.imageUrl);
+      setPreview(item.img_url || SampleImg);
+      if (item.location) {
+        setLocation({
+          id: item.location.id,
+          title: item.location.title,
+          address: item.location.address,
+          coordinateX: item.location.coordinate_x,
+          coordinateY: item.location.coordinate_y,
+        });
       }
     }
   }, [isEdit, item]);
 
   const handleUploadClick = () => {
-    fileInputRef.current.click();
+    fileInputRef.current?.click();
   };
 
   const handleFileChange = (e) => {
     const file = e.target.files?.[0];
     if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setPreview(imageUrl);
+      setPreview(URL.createObjectURL(file));
     }
   };
 
@@ -76,16 +120,10 @@ const ItemRegister = ({ isEdit = false, item = null }) => {
     const { name, value } = e.target;
 
     if (name === 'price') {
-      const onlyNums = onlyNumber(value);
-      setForm((prev) => ({
-        ...prev,
-        [name]: formatNumber(onlyNums),
-      }));
+      const num = onlyNumber(value);
+      setForm((prev) => ({ ...prev, [name]: formatNumber(num) }));
     } else {
-      setForm((prev) => ({
-        ...prev,
-        [name]: value,
-      }));
+      setForm((prev) => ({ ...prev, [name]: value }));
     }
   };
 
@@ -93,42 +131,22 @@ const ItemRegister = ({ isEdit = false, item = null }) => {
     window.open('/map', 'mapSelectPopup', 'width=600,height=800');
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     const cleanPrice = Number(onlyNumber(form.price));
 
-    const dataToSubmit = {
+    if (!location.id) {
+      alert('위치를 선택해주세요.');
+      return;
+    }
+    const payload = {
       ...form,
       price: cleanPrice,
-      img_id: 1, // ✅ 이미지 업로드 구현 후 수정 필요
+      img_id: 1,
+      category_id: form.category,
+      contents: form.contents,
+      location_id: location.id,
     };
-
-    if (isEdit) {
-      try {
-        await authRequest({
-          method: 'put',
-          url: `/items/${item.id}`,
-          data: dataToSubmit,
-          navigate,
-        });
-        alert('상품이 수정되었습니다!');
-        navigate(`/items/${item.id}`);
-      } catch (error) {
-        console.log('상품 수정 오류 : ', error);
-      }
-    } else {
-      try {
-        const response = await authRequest({
-          method: 'post',
-          url: '/items',
-          data: dataToSubmit,
-          navigate,
-        });
-        alert('상품이 등록되었습니다!');
-        navigate(`/items/${response.insertId}`);
-      } catch (error) {
-        console.log('상품 등록 오류 : ', error);
-      }
-    }
+    itemMutation.mutate(payload);
   };
 
   return (
@@ -136,7 +154,7 @@ const ItemRegister = ({ isEdit = false, item = null }) => {
       <h1 className="sell_title">{isEdit ? '수정하기' : '판매하기'}</h1>
 
       <section className="item_img_upload">
-        <img src={preview}></img>
+        <img src={preview} alt="preview" />
         <button
           className="item_img_upload_btn"
           type="button"

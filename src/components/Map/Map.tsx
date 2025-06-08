@@ -2,14 +2,30 @@ import styled from 'styled-components';
 import useKakaoMap from '../../hooks/useKakaoMap';
 import point from '../../assets/pointer.svg';
 import { useEffect, useState } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { Location } from '../../types/location.model';
+import axiosInstance from '../../api/axiosInstance';
 
 function Map() {
-  const [pointer, _setPointer] = useState(point);
   const [latitude, setLatitude] = useState(33.4507);
   const [longitude, setLongitude] = useState(126.5707);
-  const { mapRef, roadAddress, address } = useKakaoMap({
+  const { mapRef, center, roadAddress, address } = useKakaoMap({
     containerId: 'map',
     initialCenter: { lat: latitude, lng: longitude },
+  });
+
+  const queryClient = useQueryClient();
+  const createLocation = useMutation({
+    mutationFn: (payload: Omit<Location, 'id'>) =>
+      axiosInstance.post('/location', payload).then((res) => res.data),
+    onSuccess: (data) => {
+      window.opener?.postMessage(
+        { locationId: data.insertId, address: data.address, coords: center },
+        window.origin,
+      );
+      queryClient.invalidateQueries(['locations']);
+      window.close();
+    },
   });
 
   useEffect(() => {
@@ -33,20 +49,22 @@ function Map() {
       'daddress',
     ) as HTMLInputElement;
     const throwAddress = detailAddress.value;
-    console.log(throwAddress);
     if (!throwAddress) {
       alert('상세 설명을 입력해주세요.');
       return;
     }
-    opener.document.getElementById('place')!.value =
-      `${throwAddress}, ${address}`;
-    window.close();
+    createLocation.mutate({
+      title: throwAddress,
+      address: address,
+      coordinateX: center.lat,
+      coordinateY: center.lng,
+    });
   };
 
   return (
     <MapStyle>
       <div id="map">
-        <img className="pointer" src={pointer} alt="pointer" />
+        <img className="pointer" src={point} alt="pointer" />
       </div>
       <div className="address-container">
         <h2 className="text-2xl">약속 장소</h2>
@@ -56,12 +74,7 @@ function Map() {
           <div className="flex justify-between">
             <div className="w-5/6">
               <label htmlFor="daddress">상세 설명: </label>
-              <input
-                className="w-[100vw]"
-                type="text"
-                id="daddress"
-                placeholder="ex) 편의점 앞 등"
-              />
+              <input type="text" id="daddress" placeholder="ex) 편의점 앞 등" />
             </div>
             <button className="confirm-btn" onClick={handleCloseWindow}>
               확정
