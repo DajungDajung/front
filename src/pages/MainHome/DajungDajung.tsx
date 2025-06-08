@@ -5,7 +5,7 @@ import './DajungDajung.css';
 import banner1 from '../../assets/banner1.png';
 import banner2 from '../../assets/banner2.png';
 import { getImgSrc } from '../../utils/image';
-import { ProductProps } from '../../types/product.model';
+import { Item } from '../../types/item.model';
 import { useQuery } from '@tanstack/react-query';
 import { fetchProductList } from '../../api/productApi';
 
@@ -13,7 +13,7 @@ const bannerImages = [banner1, banner2];
 const ITEMS_PER_PAGE = 12;
 
 const DajungDajung = () => {
-  const [showProducts, setShowProducts] = useState<ProductProps[]>([]);
+  const [showProducts, setShowProducts] = useState<Item[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [bannerIndex, setBannerIndex] = useState(0);
   const [hasMore, setHasMore] = useState(true);
@@ -115,11 +115,11 @@ const DajungDajung = () => {
                 <div className="product-card">
                   <img
                     className="card-image"
-                    src={getImgSrc(item.img)}
+                    src={getImgSrc(item.imgId)}
                     alt="상품 이미지"
                   />
                   <div className="card-info">
-                    <div className="card-name">{item.name}</div>
+                    <div className="card-name">{item.title}</div>
                     <div className="card-bottom">
                       <div className="card-price">
                         {Number(item.price).toLocaleString()}원

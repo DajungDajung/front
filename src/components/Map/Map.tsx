@@ -18,7 +18,7 @@ function Map() {
       setLatitude(lat);
       setLongitude(lng);
     });
-  }, []);
+  }, [mapRef]);
 
   useEffect(() => {
     if (mapRef.current) {

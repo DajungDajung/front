@@ -25,17 +25,20 @@ const Login = () => {
       return;
     }
 
-    axiosInstance.post('/auth/signin', {
-      email,
-      password
-    }).then((res) => {
-      localStorage.setItem('nickname', res.data[0].nickname);
-      alert('로그인 성공! 메인페이지로 이동합니다.');
-      navigate('/');
-    }).catch(err => {
-      console.error('로그인 요청 중 오류가 발생했습니다:', err);
-      alert('로그인에 실패했습니다. 다시 시도해주세요.');
-    })
+    axiosInstance
+      .post('/auth/signin', {
+        email,
+        password,
+      })
+      .then((res) => {
+        localStorage.setItem('nickname', res.data[0].nickname);
+        alert('로그인 성공! 메인페이지로 이동합니다.');
+        navigate('/');
+      })
+      .catch((err) => {
+        console.error('로그인 요청 중 오류가 발생했습니다:', err);
+        alert('로그인에 실패했습니다. 다시 시도해주세요.');
+      });
   };
 
   return (
@@ -61,15 +64,32 @@ const Login = () => {
           placeholder="비밀번호"
           required
         />
-        <button type="submit" className="button button--primary">로그인</button>
+        <button type="submit" className="button button--primary">
+          로그인
+        </button>
       </form>
 
       <div className="login-divider" />
 
       <div className="login-options">
-        <button className="button button--primary" onClick={() => navigate('/signup')}>회원가입</button>
-        <button className="button button--gray" onClick={() => navigate('/findid')}>아이디 찾기</button>
-        <button className="button button--gray" onClick={() => navigate('/resetpwd')}>비밀번호 초기화</button>
+        <button
+          className="button button--primary"
+          onClick={() => navigate('/signup')}
+        >
+          회원가입
+        </button>
+        <button
+          className="button button--gray"
+          onClick={() => navigate('/findid')}
+        >
+          아이디 찾기
+        </button>
+        <button
+          className="button button--gray"
+          onClick={() => navigate('/resetpwd')}
+        >
+          비밀번호 초기화
+        </button>
       </div>
     </div>
   );

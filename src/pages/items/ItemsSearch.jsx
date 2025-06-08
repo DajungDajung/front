@@ -19,8 +19,12 @@ const ItemsSearch = () => {
 
   useEffect(() => {
     const params = new URLSearchParams();
-    if (q) params.append('q', q);
-    if (category) params.append('category', category);
+    if (q) {
+      params.append('q', q);
+    }
+    if (category) {
+      params.append('category', category);
+    }
 
     const fetchItemSearchData = async () => {
       try {

@@ -11,7 +11,6 @@ import { formatNumber } from '../../../utils/format';
 import { getImgSrc } from '../../../utils/image.js';
 import Comments from '../comments/Comments';
 import useKakaoMap from '../../../hooks/useKakaoMap';
-import pointer from '../../../assets/pointer.svg';
 import './ItemDetail.css';
 
 const ItemDetail = () => {
@@ -183,13 +182,7 @@ const ItemDetail = () => {
             <div
               className="border-[1px] rounded-xl border-gray-300 w-full h-52 object-center relative"
               id="mini_map"
-            >
-              <img
-                className=" absolute top-[50%] left-[50%] transfrom -translate-x-1/2 -translate-y-7 pointer-events-none z-20 h-7"
-                src={pointer}
-                alt="pointer"
-              />
-            </div>
+            ></div>
             <p>{address}</p>
           </div>
         </div>

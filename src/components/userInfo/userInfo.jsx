@@ -1,9 +1,9 @@
-import styles from "./userInfo.module.css";
-import { getImgSrc } from "../../utils/image";
-import { getDaysAgo } from "../../utils/date";
-import { useEffect, useState } from "react";
-import axiosInstance from "../../api/axiosInstance";
-import { useNavigate } from "react-router-dom";
+import styles from './userInfo.module.css';
+import { getImgSrc } from '../../utils/image';
+import { getDaysAgo } from '../../utils/date';
+import { useEffect, useState } from 'react';
+import axiosInstance from '../../api/axiosInstance';
+import { useNavigate } from 'react-router-dom';
 
 export default function UserInfo({ userData }) {
   const [finalUserData, setFinalUserData] = useState(null);
@@ -14,14 +14,14 @@ export default function UserInfo({ userData }) {
       setFinalUserData(userData);
     } else {
       axiosInstance
-        .get("/users/mypage")
+        .get('/users/mypage')
         .then((response) => {
           setFinalUserData(response.data[0]);
         })
         .catch((err) => {
           if (err.response?.status === 404) {
-            alert("존재하지 않는 사용자입니다.\n메인페이지로 이동합니다.");
-            navigate("/");
+            alert('존재하지 않는 사용자입니다.\n메인페이지로 이동합니다.');
+            navigate('/');
           }
         });
     }
@@ -54,7 +54,7 @@ export default function UserInfo({ userData }) {
             <p>
               {finalUserData?.info
                 ? finalUserData?.info
-                : "상점에 대한 설명이 없습니다."}
+                : '상점에 대한 설명이 없습니다.'}
             </p>
           </div>
         </div>
@@ -70,7 +70,7 @@ export default function UserInfo({ userData }) {
                 <td className={styles.tContent}>
                   {finalUserData?.contact.replace(
                     /(\d{3})(\d{4})(\d{4})/,
-                    "$1-$2-$3"
+                    '$1-$2-$3',
                   )}
                 </td>
               </tr>

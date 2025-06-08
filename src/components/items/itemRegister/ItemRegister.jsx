@@ -1,9 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { authRequest } from '../../../api/axiosInstance';
 import { getCategories } from '../../../api/categoryApi';
 import SampleImg from '../../../assets/sampleImg.svg';
 import { formatNumber } from '../../../utils/format';
+import { CiMap } from 'react-icons/ci';
 import './ItemRegister.css';
 
 const onlyNumber = (str) => str.replace(/[^0-9]/g, '');
@@ -18,9 +19,15 @@ const ItemRegister = ({ isEdit = false, item = null }) => {
     category: '',
     price: '',
     contents: '',
-    place: '',
   });
   const [categories, setCategories] = useState([]);
+  const [place, setPlace] = useState({
+    id: 0,
+    title: '',
+    address: '',
+    coordinatex: 0,
+    coordinatey: 0,
+  });
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -40,7 +47,12 @@ const ItemRegister = ({ isEdit = false, item = null }) => {
         category: item.category_id || '',
         price: item.price ? formatNumber(item.price) : '',
         contents: item.contents || '',
-        place: item.place || '',
+      });
+      setPlace({
+        title: item.location?.title || '',
+        address: item.location?.address || '',
+        coordinatex: item.location?.coordinatex || 0,
+        coordinatey: item.location?.coordinatey || 0,
       });
       if (item.imageUrl) {
         setPreview(item.imageUrl);
@@ -92,7 +104,6 @@ const ItemRegister = ({ isEdit = false, item = null }) => {
 
     if (isEdit) {
       try {
-        console.log(dataToSubmit);
         await authRequest({
           method: 'put',
           url: `/items/${item.id}`,
@@ -106,7 +117,6 @@ const ItemRegister = ({ isEdit = false, item = null }) => {
       }
     } else {
       try {
-        console.log(dataToSubmit);
         const response = await authRequest({
           method: 'post',
           url: '/items',
@@ -178,26 +188,21 @@ const ItemRegister = ({ isEdit = false, item = null }) => {
           value={form.contents}
           onChange={handleChange}
         />
-        <div className="inline-flex items-center">
-          <label className="min-w-1/6 text-[18px] text-center" htmlFor="place">
-            약속 장소
-          </label>
-          <div className="w-[100%] h-[60px] rounded-[10px] border-[1px] border-solid border-gray-300 py-3 inline-flex items-center justify-between text-center">
-            <input
-              type="text"
-              id="place"
-              className="pl-3 w-[80%]"
-              disabled
-              placeholder="약속장소를 선택해주세요"
-              value={form.place}
-            />
-            <a
-              className="min-w-1/6 flex items-center border-l-gray-200 border-l-2 p-3 justify-center cursor-pointer text-gray-400 hover:text-black"
-              onClick={handleSelectPlace}
-            >
-              Map
-            </a>
-          </div>
+        <div className="text-xl w-[100%] h-[60px] rounded-[10px] border-[1px] border-solid border-gray-300 py-3 inline-flex items-center justify-between text-center">
+          <input
+            type="text"
+            id="place"
+            className="pl-3 w-[100%] border-r-gray-200 border-r-2"
+            disabled
+            placeholder="약속장소를 선택해주세요"
+            value={form.place}
+          />
+          <a
+            className=" text-3xl flex items-center p-5 justify-center cursor-pointer text-gray-400 hover:text-[#EC7FA9] active:text-[#BE5985]"
+            onClick={handleSelectPlace}
+          >
+            <CiMap />
+          </a>
         </div>
       </section>
       <div style={{ display: 'flex', justifyContent: 'center' }}>
