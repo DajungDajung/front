@@ -10,7 +10,7 @@ interface Props {
   };
 }
 
-function useKakaoMap({ containerId, initialCenter, options }: Props) {
+function useKakaoMap({ containerId, initialCenter, options, title }: Props) {
   const mapRef = useRef<kakao.maps.Map | null>(null);
   const [center, setCenter] = useState(initialCenter);
   const [roadAddress, setRoadAddress] = useState<string>('');

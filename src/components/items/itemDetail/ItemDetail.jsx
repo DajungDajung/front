@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { authRequest } from '../../../api/axiosInstance.js';
 import { getComments } from '../../../api/commentsApi.js';
@@ -12,19 +12,77 @@ import { getImgSrc } from '../../../utils/image.js';
 import Comments from '../comments/Comments';
 import useKakaoMap from '../../../hooks/useKakaoMap';
 import './ItemDetail.css';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 const ItemDetail = () => {
   const navigate = useNavigate();
   const { id } = useParams();
+
+  const queryClient = useQueryClient();
+  const { data: itemDetailData } = useQuery({
+    queryKey: ['itemDetail', id],
+    queryFn: () => getItemDetail(id).then((res) => res.data),
+    enabled: !!id,
+  });
+
+  const { data: commentsData = [], refetch: refetchCommentData } = useQuery({
+    queryKey: ['comments', id],
+    queryFn: () => getComments(id).then((res) => res.data),
+    enabled: !!id,
+  });
+
+  const likeMutation = useMutation({
+    mutationFn: () => {
+      const method = isLike ? 'delete' : 'post';
+      return authRequest({ method, url: `/users/likes/${item.id}`, navigate });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(['itemDetail', id]);
+    },
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: () => deleteItem(item.id),
+    onSuccess: () => {
+      navigate('/');
+    },
+  });
+
   const [item, setItem] = useState({});
   const [seller, setSeller] = useState({});
   const [isLike, setIsLike] = useState(false);
   const [isSeller, setIsSeller] = useState(false);
   const [comments, setComments] = useState([]);
+  const [location, setLocation] = useState({});
+  const [shouldRefetchComments, setShouldRefetchComments] = useState(false);
+
+  useEffect(() => {
+    if (itemDetailData) {
+      setItem(itemDetailData.item);
+      setSeller(itemDetailData.user);
+      setIsLike(itemDetailData.item.liked === 'true');
+      setIsSeller(itemDetailData.item.isSeller === 'true');
+      setLocation(itemDetailData.location);
+    }
+  }, [itemDetailData]);
+
+  useEffect(() => {
+    setComments(commentsData);
+  }, [commentsData]);
+
+  useEffect(() => {
+    if (shouldRefetchComments) {
+      refetchCommentData();
+    }
+  }, [shouldRefetchComments, refetchCommentData]);
+
   const [isMoreInfo, setIsMoreInfo] = useState(false);
   const { address } = useKakaoMap({
     containerId: 'mini_map',
-    initialCenter: { lat: 37.5665, lng: 126.978 },
+    initialCenter: {
+      lat: location.coordinateX || 37.5665,
+      lng: location.coordinateY || 126.978,
+    },
     options: {
       disableUI: true,
       fixedMap: true,
@@ -35,67 +93,22 @@ const ItemDetail = () => {
     navigate(`/items/edit/${id}`, { state: { item, isEdit: true } });
   };
 
-  const fetchCommentData = useCallback(async () => {
-    try {
-      const response = await getComments(id);
-      setComments(response.data);
-    } catch (err) {
-      console.error('댓글 가져오기 실패:', err);
-    }
-  }, [id]);
-
-  useEffect(() => {
-    const fetchItemDetailData = async () => {
-      try {
-        const response = await getItemDetail(id);
-        const itemData = {
-          ...response.data.item,
-          liked: response.data.item.liked === 'true',
-          seller: response.data.item.seller === 'true',
-        };
-        setItem(itemData);
-        setSeller(response.data.user);
-        setIsLike(itemData.liked);
-        setIsSeller(itemData.seller);
-      } catch (error) {
-        console.log('상품 상세 조회 에러 : ', error);
-      }
-    };
-
-    fetchItemDetailData();
-    fetchCommentData();
-  }, [id, fetchCommentData]);
-
-  const handleLikeButton = async (item_id) => {
-    try {
-      const method = isLike ? 'delete' : 'post';
-      const url = `/users/likes/${item_id}`;
-      await authRequest({ method, url, navigate });
-      setIsLike(!isLike);
-
-      setItem((prev) => ({
-        ...prev,
-        like: isLike ? prev.like - 1 : prev.like + 1,
-      }));
-    } catch (error) {
-      console.log('좋아요 처리 에러:', error.response?.data || error.message);
-    }
+  const handleLikeButton = () => {
+    likeMutation.mutate();
   };
 
-  const handleDelete = async (id) => {
-    try {
-      const doDelete = window.confirm('상품을 삭제하시겠습니까?');
-      if (doDelete) {
-        await deleteItem(id);
-        navigate('/');
-      }
-    } catch (error) {
-      console.log('상품 삭제 에러 : ', error);
+  const handleDelete = async () => {
+    if (window.confirm('상품을 삭제하시겠습니까?')) {
+      deleteMutation.mutate();
     }
   };
 
   const handleMoreInfo = () => {
     setIsMoreInfo(!isMoreInfo);
+  };
+
+  const handleCommentAdded = () => {
+    setShouldRefetchComments((prev) => !prev);
   };
 
   return (
@@ -183,17 +196,16 @@ const ItemDetail = () => {
               className="border-[1px] rounded-xl border-gray-300 w-full h-52 object-center relative"
               id="mini_map"
             ></div>
-            <p>{address}</p>
+            <p>{[location.title, address].join(',')}</p>
           </div>
         </div>
       </div>
 
       <div className="line" />
-
       <Comments
         comments={comments}
         item_id={id}
-        onCommentAdded={fetchCommentData}
+        onCommentAdded={handleCommentAdded}
       />
     </>
   );

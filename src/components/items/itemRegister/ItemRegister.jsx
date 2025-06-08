@@ -7,16 +7,13 @@ import { formatNumber } from '../../../utils/format';
 import { CiMap } from 'react-icons/ci';
 import './ItemRegister.css';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { postLocation, putLocation } from '../../../api/locationAPI';
 
 const onlyNumber = (str) => str.replace(/[^0-9]/g, '');
 
 const ItemRegister = ({ isEdit = false, item = null }) => {
-  const navigate = useNavigate();
-
   const fileInputRef = useRef(null);
-  const mapPopupRef = useRef(null);
-
-  const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
 
   const { data: categories = [] } = useQuery({
     queryKey: ['categories'],
@@ -33,7 +30,7 @@ const ItemRegister = ({ isEdit = false, item = null }) => {
     contents: '',
   });
   const [location, setLocation] = useState({
-    id: 0,
+    id: undefined,
     title: '',
     address: '',
     coordinateX: 0,
@@ -41,15 +38,25 @@ const ItemRegister = ({ isEdit = false, item = null }) => {
   });
 
   const QueryClient = useQueryClient();
-  const createLocation = useMutation({
-    mutationFn: (payload) =>
-      axiosInstance.post('/location', payload).then((res) => res.data),
-    onSuccess: (data) => {
-      setLocation((prev) => ({
-        ...prev,
-        id: data.insertId,
-        title: data.title || prev.title,
-      }));
+  const locationMutation = useMutation({
+    mutationFn: (payload) => {
+      if (location.id === undefined) {
+        return postLocation(payload).then((res) => res.data);
+      } else {
+        return putLocation({
+          id: location.id,
+          ...payload,
+        }).then((res) => res.data);
+      }
+    },
+    onSuccess: (data, payload) => {
+      setLocation({
+        id: data.insertId ?? location.id,
+        title: payload.title,
+        address: payload.address,
+        coordinate_x: payload.coordinateX,
+        coordinate_y: payload.coordinateY,
+      });
       QueryClient.invalidateQueries(['locations']);
     },
   });
@@ -71,36 +78,24 @@ const ItemRegister = ({ isEdit = false, item = null }) => {
 
   useEffect(() => {
     const handler = (event) => {
-      if (event.origin !== window.origin) {
+      if (event.target.origin !== window.origin) {
         return;
       }
       const { title, address, coords } = event.data;
       if (title && address && coords) {
-        createLocation.mutate({
-          title: title,
+        let payload = {
+          title,
           address,
           coordinateX: coords.lat,
           coordinateY: coords.lng,
-        });
-        setIsOpen(false);
+        };
+        locationMutation.mutate(payload);
+        setLocation(payload);
       }
     };
     window.addEventListener('message', handler);
     return () => window.removeEventListener('message', handler);
-  }, [createLocation]);
-
-  useEffect(() => {
-    if (!isOpen || !mapPopupRef.current) {
-      return;
-    }
-    const timer = setInterval(() => {
-      if (mapPopupRef.current.closed) {
-        setIsOpen(false);
-        clearInterval(timer);
-      }
-    }, 500);
-    return () => clearInterval(timer);
-  }, [isOpen]);
+  }, [locationMutation]);
 
   useEffect(() => {
     if (isEdit && item) {
@@ -231,7 +226,9 @@ const ItemRegister = ({ isEdit = false, item = null }) => {
             className="pl-3 w-[100%] border-r-gray-200 border-r-2"
             disabled
             placeholder="약속장소를 선택해주세요"
-            value={form.place}
+            value={
+              location.title && [location.title, location.address].join(',')
+            }
           />
           <a
             className=" text-3xl flex items-center p-5 justify-center cursor-pointer text-gray-400 hover:text-[#EC7FA9] active:text-[#BE5985]"
@@ -246,6 +243,9 @@ const ItemRegister = ({ isEdit = false, item = null }) => {
           작성 완료
         </button>
       </div>
+      <p className="text-sm text-gray-500">
+        Debug location: {JSON.stringify(location)}
+      </p>
     </div>
   );
 };

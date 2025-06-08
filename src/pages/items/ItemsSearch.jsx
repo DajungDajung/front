@@ -32,7 +32,6 @@ const ItemsSearch = () => {
 
         setItems(response.data);
         setIsEmpty(response.data.length === 0);
-        console.log(response);
       } catch (error) {
         console.error('상품 검색 에러 : ', error);
         setItems([]);

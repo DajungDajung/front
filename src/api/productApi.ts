@@ -18,7 +18,6 @@ export const fetchProductList = async () => {
   });
 
   const data = Array.isArray(response.data) ? response.data : [];
-  console.log('Fetched product data:', data);
 
   return data.map(
     (item: RawItem): Item => ({

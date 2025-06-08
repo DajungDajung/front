@@ -6,8 +6,6 @@ const ItemsEdit = () => {
   const location = useLocation();
   const { item, isEdit } = location.state || {};
 
-  console.log(item);
-
   return (
     <>
       <ItemRegister isEdit={isEdit} item={item} />
