@@ -11,8 +11,12 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 const onlyNumber = (str) => str.replace(/[^0-9]/g, '');
 
 const ItemRegister = ({ isEdit = false, item = null }) => {
-  const fileInputRef = useRef(null);
   const navigate = useNavigate();
+
+  const fileInputRef = useRef(null);
+  const mapPopupRef = useRef(null);
+
+  const [isOpen, setIsOpen] = useState(false);
 
   const { data: categories = [] } = useQuery({
     queryKey: ['categories'],
@@ -58,7 +62,7 @@ const ItemRegister = ({ isEdit = false, item = null }) => {
     },
     onSuccess: (responseData) => {
       alert(isEdit ? '상품이 수정되었습니다!' : '상품이 등록되었습니다');
-      QueryClient.invalidateQueries('items');
+      QueryClient.invalidateQueries(['items']);
       navigate(
         isEdit ? `/items/${item.id}` : `/items/${responseData.insertId}`,
       );
@@ -78,11 +82,25 @@ const ItemRegister = ({ isEdit = false, item = null }) => {
           coordinateX: coords.lat,
           coordinateY: coords.lng,
         });
+        setIsOpen(false);
       }
     };
     window.addEventListener('message', handler);
     return () => window.removeEventListener('message', handler);
   }, [createLocation]);
+
+  useEffect(() => {
+    if (!isOpen || !mapPopupRef.current) {
+      return;
+    }
+    const timer = setInterval(() => {
+      if (mapPopupRef.current.closed) {
+        setIsOpen(false);
+        clearInterval(timer);
+      }
+    }, 500);
+    return () => clearInterval(timer);
+  }, [isOpen]);
 
   useEffect(() => {
     if (isEdit && item) {

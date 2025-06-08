@@ -2,30 +2,15 @@ import styled from 'styled-components';
 import useKakaoMap from '../../hooks/useKakaoMap';
 import point from '../../assets/pointer.svg';
 import { useEffect, useState } from 'react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Location } from '../../types/location.model';
-import axiosInstance from '../../api/axiosInstance';
+import { Coordination } from '../../types/location.model';
 
 function Map() {
+  const [pointer, _setPointer] = useState(point);
   const [latitude, setLatitude] = useState(33.4507);
   const [longitude, setLongitude] = useState(126.5707);
   const { mapRef, center, roadAddress, address } = useKakaoMap({
     containerId: 'map',
     initialCenter: { lat: latitude, lng: longitude },
-  });
-
-  const queryClient = useQueryClient();
-  const createLocation = useMutation({
-    mutationFn: (payload: Omit<Location, 'id'>) =>
-      axiosInstance.post('/location', payload).then((res) => res.data),
-    onSuccess: (data) => {
-      window.opener?.postMessage(
-        { locationId: data.insertId, address: data.address, coords: center },
-        window.origin,
-      );
-      queryClient.invalidateQueries(['locations']);
-      window.close();
-    },
   });
 
   useEffect(() => {
@@ -53,18 +38,21 @@ function Map() {
       alert('상세 설명을 입력해주세요.');
       return;
     }
-    createLocation.mutate({
-      title: throwAddress,
-      address: address,
-      coordinateX: center.lat,
-      coordinateY: center.lng,
-    });
+    window.opener?.postMessage(
+      {
+        title: throwAddress,
+        address: address,
+        coords: center,
+      },
+      window.origin,
+    );
+    window.close();
   };
 
   return (
     <MapStyle>
       <div id="map">
-        <img className="pointer" src={point} alt="pointer" />
+        <img className="pointer" src={pointer} alt="pointer" />
       </div>
       <div className="address-container">
         <h2 className="text-2xl">약속 장소</h2>

@@ -27,7 +27,7 @@ export default function UserInfos() {
           }
         }
       });
-  }, [id]);
+  }, [id, navigate]);
 
   const [page, setPage] = useState(1);
   const itemPerPage = 10;
