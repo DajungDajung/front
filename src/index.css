@@ -1,6 +1,5 @@
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css');
-html {
-  font-family:
+/* font-family:
     'Pretendard Variable',
     Pretendard,
     -apple-system,
@@ -15,8 +14,7 @@ html {
     'Apple Color Emoji',
     'Segoe UI Emoji',
     'Segoe UI Symbol',
-    sans-serif;
-}
+    sans-serif; */
 
 * {
   font-weight: 600;

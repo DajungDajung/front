@@ -231,7 +231,7 @@ const ItemRegister = ({ isEdit = false, item = null }) => {
             }
           />
           <a
-            className=" text-3xl flex items-center p-5 justify-center cursor-pointer text-gray-400 hover:text-[#EC7FA9] active:text-[#BE5985]"
+            className=" text-2xl flex items-center p-5 justify-center cursor-pointer text-gray-400 hover:text-[#EC7FA9] active:text-[#BE5985]"
             onClick={handleSelectPlace}
           >
             <CiMap />
