@@ -243,9 +243,6 @@ const ItemRegister = ({ isEdit = false, item = null }) => {
           작성 완료
         </button>
       </div>
-      <p className="text-sm text-gray-500">
-        Debug location: {JSON.stringify(location)}
-      </p>
     </div>
   );
 };
