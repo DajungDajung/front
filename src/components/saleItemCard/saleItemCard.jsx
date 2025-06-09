@@ -17,7 +17,7 @@ export default function SaleItemCard({ item, setItem }) {
     if (confirm('상품을 삭제하시겠습니까?')) {
       axiosInstance
         .delete(`/items/${num}`)
-        .then((response) => {
+        .then(() => {
           setItem((prev) => prev.filter((i) => i.id !== num));
           alert('상품이 삭제되었습니다.');
         })

@@ -5,19 +5,19 @@ import axiosInstance from '../../api/axiosInstance';
 
 export default function Unsubscribe() {
   const navigate = useNavigate();
-  const [isOut, setIsOut] = useState(null);
+  const [_isOut, setIsOut] = useState(null);
   const signOffConfirm = () => {
     if (
       confirm('탈퇴 시 등록된 정보는 복구가 불가능합니다.\n 탈퇴하시겠습니까?')
     ) {
       axiosInstance
         .delete('/users/mypage')
-        .then((response) => {
+        .then(() => {
           alert('탈퇴 처리 되었습니다.\n 이용해주셔서 감사합니다.');
           navigate('/');
           localStorage.removeItem('nickname');
         })
-        .catch((err) => {
+        .catch(() => {
           alert('죄송합니다. 나중에 다시 시도해주세요');
         });
     }

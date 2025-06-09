@@ -9,12 +9,11 @@ import Signup from './pages/Signup/Signup';
 import FindId from './pages/FindId/FindId';
 import ResetPwd from './pages/ResetPwd/ResetPwd';
 import NewPwd from './pages/NewPwd/NewPwd';
-
 import DajungDajung from './pages/MainHome/DajungDajung';
 import UserInfos from './pages/UserInfos/userInfos';
 import UserInfo from './components/userInfo/userInfo';
 import MyPage from './pages/MyPage/myPage';
-import UpdateInfo from './components/updateInfo/UpdateInfo';
+import UpdateInfo from './components/userInfo/updateInfo/UpdateInfo';
 import Unsubscribe from './pages/unsubscribe/Unsubscribe';
 import UploadItems from './pages/UploadItems/UploadItems';
 import UserLikes from './pages/UserLikes/UserLikes';

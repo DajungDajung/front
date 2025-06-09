@@ -8,8 +8,11 @@ const Category = ({ selectedCategory, keyword, categories }) => {
   const navigate = useNavigate();
 
   const handleClickCategory = (categoryId, categoryName) => {
-    if (categoryName === '전체') navigate(`/items?q=${keyword}`);
-    else navigate(`/items?q=${keyword}&category=${categoryId}`);
+    if (categoryName === '전체') {
+      navigate(`/items?q=${keyword}`);
+    } else {
+      navigate(`/items?q=${keyword}&category=${categoryId}`);
+    }
   };
 
   const allCategories = [{ id: 0, category: '전체' }, ...categories];

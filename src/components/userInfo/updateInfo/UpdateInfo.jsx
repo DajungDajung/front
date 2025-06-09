@@ -1,11 +1,11 @@
 import style from './UpdateInfo.module.css';
-import profileImage from '../../assets/default_image.jpg';
+import profileImage from '../../../assets/default_image.jpg';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useEffect } from 'react';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import axiosInstance from '../../api/axiosInstance';
+import axiosInstance from '../../../api/axiosInstance';
 
 const scheme = yup.object({
   name: yup
