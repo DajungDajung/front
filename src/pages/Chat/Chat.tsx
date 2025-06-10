@@ -100,7 +100,7 @@ function Chat(): JSX.Element {
 
     socketRef.current = socket;
 
-    socket.on('connection', () => {
+    socket.on('connect', () => {
       console.log('소켓 연결됨:', socket.id);
       setConnectionError(false);
     });
@@ -110,12 +110,22 @@ function Chat(): JSX.Element {
       setConnectionError(true);
     });
 
+    socket.on('connect_error', (err) => {
+      console.log('connect_error 발생:', err.message);
+      setConnectionError(true);
+    });
+
     socket.on('disconnect', (reason) => {
       console.log('연결 끊김:', reason);
       if (reason === 'io server disconnect') {
         socket.connect();
       }
     });
+
+    return () => {
+      socket.disconnect();
+      console.log('소켓 연결 종료');
+    };
   }, []);
 
   return (
@@ -161,7 +171,7 @@ const ChatStyle = styled.div`
   display: flex;
   width: 100%;
   height: calc(100vh - 80px - 35px);
-  margin-top: 60px;
+  margin-top: 80px;
 
   .connection_error {
     position: fixed;
