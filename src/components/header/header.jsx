@@ -1,16 +1,24 @@
 import Logo from '../../assets/Logo.png';
 import searchIcon from '../../assets/searchIcon.png';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styles from './header.module.css';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import axiosInstance from '../../api/axiosInstance';
+import { createPortal } from 'react-dom';
+
+function DropdownPortal({ children }) {
+  return createPortal(children, document.body);
+}
 
 function Header() {
   const [nickname, setNickname] = useState('');
   const [showDropdown, setShowDropdown] = useState(false);
   const [searchInput, setSearchInput] = useState('');
+  const [dropdownPos, setDropDownPos] = useState({ top: 0, left: 0 });
   const navigate = useNavigate();
   const location = useLocation();
+  const dropdownRef = useRef(null);
+  const wrapperRef = useRef(null);
 
   useEffect(() => {
     const storedNickname = localStorage.getItem('nickname');
@@ -47,6 +55,35 @@ function Header() {
       });
   };
 
+  useEffect(() => {
+    if (showDropdown && wrapperRef.current) {
+      const rect = wrapperRef.current.getBoundingClientRect();
+      setDropDownPos({
+        top: rect.bottom + 5,
+        left: rect.left,
+      });
+    }
+  }, [showDropdown]);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(e.target) &&
+        wrapperRef.current &&
+        !wrapperRef.current.contains(e.target)
+      ) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   return (
     <nav>
       <div className={styles.container}>
@@ -80,20 +117,32 @@ function Header() {
             <div
               className={styles.dropdownWrapper}
               onClick={() => setShowDropdown(!showDropdown)}
+              ref={wrapperRef}
             >
               <span className={styles.nickname}>{nickname}</span>
               {showDropdown && (
-                <div className={styles.dropdown}>
-                  <Link to="/users/mypage" className={styles.dropdownItem}>
-                    마이페이지
-                  </Link>
-                  <button
-                    className={styles.dropdownItem}
-                    onClick={handleLogout}
+                <DropdownPortal>
+                  <div
+                    className={styles.dropdown}
+                    ref={dropdownRef}
+                    style={{
+                      position: 'absolute',
+                      top: `${dropdownPos.top}px`,
+                      left: `${dropdownPos.left}px`,
+                      zIndex: 9999,
+                    }}
                   >
-                    로그아웃
-                  </button>
-                </div>
+                    <Link to="/users/mypage" className={styles.dropdownItem}>
+                      마이페이지
+                    </Link>
+                    <button
+                      className={styles.dropdownItem}
+                      onClick={handleLogout}
+                    >
+                      로그아웃
+                    </button>
+                  </div>
+                </DropdownPortal>
               )}
             </div>
           ) : (

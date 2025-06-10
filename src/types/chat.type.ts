@@ -1,29 +1,39 @@
+import { ChatItemInfo } from './item.type';
+
 export interface ChatRoom {
-  id: number;
-  nickname: string;
-  profileImageId: number;
-  itemTitle: string;
+  roomId: number;
+  itemId: number;
+  lastMessage: string;
   updatedAt: string;
-  isRead: boolean;
+  userId: number;
+  nickname: string;
+  imgId: number;
+  meId: number;
+  unreadCount: number;
+  itemInfo?: ChatItemInfo;
 }
 
 export interface ChatMessage {
   id: number;
+  roomId: number;
   senderId: number;
-  content: string;
+  receiverId: number;
+  contents: string;
   createdAt: string;
+  isRead: number;
+  opponentId: number;
+  opponentNickname: string;
+  opponentImg: number;
+  itemId: number;
+  itemTitle: string;
+  itemPrice: number;
+  itemImg: number;
 }
+
 export interface ChatUser {
   id: number;
   nickname: string;
   profileImageId: number;
-}
-
-export interface ChatItemInfo {
-  id: number;
-  title: string;
-  imageId: number;
-  price: number;
 }
 
 export interface ChatRoomDetail {

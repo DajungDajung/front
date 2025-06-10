@@ -16,13 +16,13 @@ function ChatRoom({ rooms, onSelect, selectedRoomId }: Props): JSX.Element {
     <>
       {rooms.map((room) => (
         <ChatRoomStyle
-          key={room.id}
-          $isSelected={room.id === selectedRoomId}
+          key={room.roomId}
+          $isSelected={room.roomId === selectedRoomId}
           onClick={() => onSelect(room)}
         >
           <div className="chat_room_content">
             <img
-              src={getImgSrc(room.profileImageId) || defaultProfile}
+              src={getImgSrc(room.imgId) || defaultProfile}
               width={50}
               style={{ borderRadius: '100px' }}
             />
@@ -32,9 +32,9 @@ function ChatRoom({ rooms, onSelect, selectedRoomId }: Props): JSX.Element {
                 style={{ display: 'flex', gap: '10px', alignItems: 'center' }}
               >
                 <p className="chat_room_subtxt">
-                  {room.itemTitle} - {getDaysAgo(room.updatedAt)}
+                  {room.lastMessage} - {getDaysAgo(room.updatedAt)}
                 </p>
-                {!room.isRead && <div className="unread_icon" />}
+                {room.unreadCount > 0 && <div className="unread_icon" />}
               </div>
             </div>
           </div>

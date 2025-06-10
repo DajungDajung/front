@@ -1,15 +1,25 @@
 import { JSX, useState } from 'react';
 import styled from 'styled-components';
 
-function ChatInput(): JSX.Element {
+interface ChatInputProps {
+  onSend: (message: string) => void;
+}
+
+function ChatInput({ onSend }: ChatInputProps): JSX.Element {
   const [message, setMessage] = useState('');
 
   const handleSend = () => {
-    if (!message.trim()) {
+    const trimmed = message.trim();
+    if (!trimmed) {
       return;
     }
 
-    alert(`전송할 메시지 : ${message}`);
+    if (typeof onSend === 'function') {
+      onSend(trimmed);
+    } else {
+      console.warn('onSend prop is not a function');
+    }
+
     setMessage('');
   };
 
@@ -19,6 +29,12 @@ function ChatInput(): JSX.Element {
         placeholder="메시지를 입력하세요"
         value={message}
         onChange={(e) => setMessage(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            handleSend();
+          }
+        }}
       />
       <button onClick={handleSend}>전송</button>
     </ChatInputStyle>

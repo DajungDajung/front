@@ -1,9 +1,9 @@
 import { JSX } from 'react';
 import styled from 'styled-components';
-import { ChatItemInfo } from '../../types/chat.type';
 import { getImgSrc } from '../../utils/image';
 import { formatNumber } from '../../utils/format';
 import { useNavigate } from 'react-router-dom';
+import { ChatItemInfo } from '../../types/item.type';
 
 interface Props {
   item: ChatItemInfo;
@@ -15,7 +15,7 @@ function ChatItem({ item }: Props): JSX.Element {
   return (
     <ChatItemStyle>
       <div className="chatitem_left">
-        <img src={getImgSrc(item.imageId)} alt="Item" />
+        <img src={getImgSrc(item.imgId)} alt="Item" />
         <p className="chatitem_title">{item.title}</p>
         <p className="chatitem_price">{formatNumber(item.price)}원</p>
       </div>
@@ -33,6 +33,8 @@ const ChatItemStyle = styled.div`
   height: 100px;
   padding: 0 16px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  position: relative;
+  z-index: 1;
 
   .chatitem_left {
     display: flex;

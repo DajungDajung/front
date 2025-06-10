@@ -1,56 +1,56 @@
-.container{
-  display : flex;
+.container {
+  display: flex;
   height: 80px;
-  width : 80vw;
-  justify-content : space-between;
-  align-items : center;
+  width: 80vw;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.navItems{
-  display : flex;
+.navItems {
+  display: flex;
   padding-right: 30px;
 }
 
-.navItems > a{
-  padding : 0 7px;
-  text-decoration : none;
-  color : black;
+.navItems > a {
+  padding: 0 7px;
+  text-decoration: none;
+  color: black;
 }
 
-.logo{
-  height : 90%;
-  width : auto;
+.logo {
+  height: 90%;
+  width: auto;
 }
 
-.searchBox{
-  position:relative;
+.searchBox {
+  position: relative;
 }
 
-.searchBox > input{
+.searchBox > input {
   height: 30px;
-  width : 450px;
-  padding-left : 12px;
-  padding-right : 30px;
-  border-radius : 7px;
-  border : 1px solid #EC7FA9;
+  width: 450px;
+  padding-left: 12px;
+  padding-right: 30px;
+  border-radius: 7px;
+  border: 1px solid #ec7fa9;
 }
 
-.searchBox > input::placeholder{
-  color : #666666;
-  font-size : 15px;
+.searchBox > input::placeholder {
+  color: #666666;
+  font-size: 15px;
 }
 
-.searchBox > input:focus{
+.searchBox > input:focus {
   border: 3px solid #ec7fa9;
-  outline : none;
+  outline: none;
 }
 
-.searchIcon{
-  position : absolute;
-  height : 25px;
+.searchIcon {
+  position: absolute;
+  height: 25px;
   top: 50%;
-  right : 10px;
-  transform : translateY(-50%);
+  right: 10px;
+  transform: translateY(-50%);
   cursor: pointer;
 }
 /* 돋보기 모양 absolute로 세로 가운데 정렬하기 */
@@ -65,7 +65,7 @@
 .nickname {
   font-weight: bold;
   padding: 0 8px;
-  color: #EC7FA9;
+  color: #ec7fa9;
 }
 
 .dropdown {
@@ -73,11 +73,12 @@
   top: 28px;
   right: 0;
   background-color: white;
-  border: 1px solid #FFB8E0;
-  border-radius: 10px; 
+  border: 1px solid #ffb8e0;
+  border-radius: 10px;
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.12);
-  z-index: 100;
+  z-index: 9999;
   min-width: 120px;
+  max-width: 120px;
   overflow: hidden;
 }
 
@@ -94,7 +95,5 @@
 }
 
 .dropdownItem:hover {
-  background-color: #ffe5f0; 
+  background-color: #ffe5f0;
 }
-
-

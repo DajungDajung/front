@@ -1,89 +1,90 @@
 .comments_container {
-    display: flex;
-    width: 80%;
-    max-width : 1200px;
-    flex-direction: column;
-    gap: 20px;
-    overflow: hidden;
+  display: flex;
+  width: 80%;
+  max-width: 1200px;
+  flex-direction: column;
+  gap: 20px;
+  overflow: hidden;
+  margin-bottom: 80px;
 }
 
 .comment_container {
-    padding: 0 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    width: 100%;
-    box-sizing: border-box;
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .comment_input_wrapper {
-    display: flex;
-    align-items: center;
-    border: 1px solid #d9d9d9;
-    border-radius: 999px;
-    padding: 10px 10px 10px 30px;
-    width: 100%;
-    box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  border: 1px solid #d9d9d9;
+  border-radius: 999px;
+  padding: 10px 10px 10px 30px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .comment_input_wrapper input {
-    flex: 1;
-    border: none;
-    outline: none;
-    font-size: 16px;
-    background: transparent;
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  background: transparent;
 }
-  
+
 .comment_input_wrapper button {
-    background-color: #ffb8e0;
-    border: none;
-    border-radius: 999px;
-    padding: 8px 20px;
-    cursor: pointer;
+  background-color: #ffb8e0;
+  border: none;
+  border-radius: 999px;
+  padding: 8px 20px;
+  cursor: pointer;
 }
 
 .comments_title {
-    display: flex;
-    gap: 20px;
-    align-items: center;
-    margin-top: 20px;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  margin-top: 20px;
 }
 
 .comment_title_txt {
-    font-size: 20px;
-    font-weight: bold;
+  font-size: 20px;
+  font-weight: bold;
 }
 
 .comment_title_count {
-    font-size: 16px;
-    color: #545454;
+  font-size: 16px;
+  color: #545454;
 }
 
 .comment {
-    display: flex;
-    gap: 20px;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
 }
 
 .comment img {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .comment_txt_container {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
 }
 
 .comment_nickname {
-    font-size: 14px;
-    color: #959595;
-    cursor: pointer;
+  font-size: 14px;
+  color: #959595;
+  cursor: pointer;
 }
 
 .comment_txt {
-    font-size: 16px;
+  font-size: 16px;
 }
