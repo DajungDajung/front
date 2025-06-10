@@ -12,9 +12,9 @@ interface SigninForm {
 }
 
 const SOCIAL_LOGIN_URLS: Record<'google' | 'naver' | 'kakao', string> = {
-  kakao: "http://3.35.49.230:3000/auth/kakao",  
-  google: "http://3.35.49.230:3000/auth/google", 
-  naver: "http://3.35.49.230:3000/auth/naver", 
+  kakao: "http://3.34.9.40:3002/auth/kakao",
+  google: "http://3.34.9.40:3002/auth/google",
+  naver: "http://3.34.9.40:3002/auth/naver",
 };
 
 const Signin: React.FC = () => {

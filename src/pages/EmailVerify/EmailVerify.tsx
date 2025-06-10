@@ -3,16 +3,20 @@ import Logo from '../../assets/Logo.png';
 
 const EmailVerify: React.FC = () => {
   const [codeDigits, setCodeDigits] = useState<string[]>(['', '', '', '', '', '']);
-  const inputRefs = useRef<Array<HTMLInputElement | null>>([]);
+
+  // 타입 명시 + 초기화
+  const inputRefs = useRef<(HTMLInputElement | null)[]>(new Array(6).fill(null));
 
   const handleChange = (index: number, value: string) => {
-    if (!/^\d?$/.test(value)) return; // 숫자만 허용, 1자리만
+    if (!/^\d?$/.test(value)) return;
+
+    // 만약 사용자가 2자리 입력 시 마지막 값만 남김
+    if (value.length > 1) value = value.slice(-1);
 
     const newCode = [...codeDigits];
     newCode[index] = value;
     setCodeDigits(newCode);
 
-    // 다음 input으로 포커스 이동
     if (value && index < 5) {
       inputRefs.current[index + 1]?.focus();
     }
@@ -31,6 +35,7 @@ const EmailVerify: React.FC = () => {
       alert('6자리 인증 코드를 입력해주세요.');
       return;
     }
+
     // 인증 코드 제출 로직
     alert(`입력한 코드: ${fullCode}`);
   };
@@ -56,9 +61,13 @@ const EmailVerify: React.FC = () => {
                 inputMode="numeric"
                 maxLength={1}
                 value={digit}
+                autoComplete="off"
+                aria-label={`인증코드 ${index + 1}번째 자리`}
                 onChange={(e) => handleChange(index, e.target.value)}
                 onKeyDown={(e) => handleKeyDown(index, e)}
-                ref={(el) => (inputRefs.current[index] = el)}
+                ref={(el) => {
+                  if (el) inputRefs.current[index] = el;
+                }}
                 className="w-10 h-12 text-center border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-pink-400 text-lg"
               />
             ))}
