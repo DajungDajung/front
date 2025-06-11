@@ -6,7 +6,6 @@ import Item from '../../components/items/item/Item';
 import { getSearchItems } from '../../api/itemsApi';
 import { getCategories } from '../../api/categoryApi';
 
-
 const ItemsSearch = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
@@ -20,8 +19,12 @@ const ItemsSearch = () => {
 
   useEffect(() => {
     const params = new URLSearchParams();
-    if (q) params.append("q", q);
-    if (category) params.append("category", category);
+    if (q) {
+      params.append('q', q);
+    }
+    if (category) {
+      params.append('category', category);
+    }
 
     const fetchItemSearchData = async () => {
       try {
@@ -29,7 +32,6 @@ const ItemsSearch = () => {
 
         setItems(response.data);
         setIsEmpty(response.data.length === 0);
-        console.log(response)
       } catch (error) {
         console.error('상품 검색 에러 : ', error);
         setItems([]);
@@ -42,7 +44,7 @@ const ItemsSearch = () => {
         const response = await getCategories();
         setCategories(response.data);
       } catch (error) {
-          console.log('카테고리 목록 조회 에러: ', error);
+        console.log('카테고리 목록 조회 에러: ', error);
       }
     };
 
@@ -51,12 +53,16 @@ const ItemsSearch = () => {
   }, [q, category]);
 
   return (
-    <div className='container'>
+    <div className="container">
       <h1>내 주변 "{q}" 검색 결과</h1>
-      <div className='search_container'>
-        <Category selectedCategory={category} keyword={q} categories={categories} />
+      <div className="search_container">
+        <Category
+          selectedCategory={category}
+          keyword={q}
+          categories={categories}
+        />
 
-        <div className='items_container'>
+        <div className="items_container">
           {isEmpty ? (
             <div className="search_empty">
               <p>검색 결과가 없습니다.</p>
