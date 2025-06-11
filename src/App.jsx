@@ -6,6 +6,7 @@ import ItemsDetail from './pages/items/ItemsDetail';
 import ItemsEdit from './pages/items/ItemsEdit';
 import Signin from './pages/SignIn/signin';
 import Signup from './pages/Signup/Signup';
+import OAuthCallback from './pages/OAuthCallback/OAuthCallback';
 import FindId from './pages/FindId/FindId';
 import ResetPwd from './pages/ResetPwd/ResetPwd';
 import NewPwd from './pages/NewPwd/NewPwd';
@@ -32,6 +33,7 @@ function App() {
         <Route path="/items/edit/:id" element={<ItemsEdit />} />
         <Route path="/signin" element={<Signin />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/oauthcallback" element={<OAuthCallback />} />
         <Route path="/findid" element={<FindId />} />
         <Route path="/resetpwd" element={<ResetPwd />} />
         <Route path="/newpwd" element={<NewPwd />} />

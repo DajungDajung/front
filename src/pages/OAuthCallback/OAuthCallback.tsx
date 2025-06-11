@@ -11,7 +11,8 @@ const OAuthCallback = () => {
     const nickname = searchParams.get('nickname');
 
     if (token && nickname) {
-      localStorage.setItem('token', token);
+      // localStorage.setItem('token', token);
+      document.cookie = `token=${token}; secure; samesite=None`;
       localStorage.setItem('nickname', nickname);
       alert(`${nickname}님 환영합니다!`);
       navigate('/');
@@ -21,7 +22,9 @@ const OAuthCallback = () => {
     }
   }, []);
 
-  return <div className="text-center mt-20 text-lg">로그인 처리 중입니다...</div>;
+  return (
+    <div className="text-center mt-20 text-lg">로그인 처리 중입니다...</div>
+  );
 };
 
 export default OAuthCallback;

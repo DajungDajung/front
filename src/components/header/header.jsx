@@ -45,6 +45,7 @@ function Header() {
       .delete('/auth/logout')
       .then(() => {
         localStorage.removeItem('nickname');
+        localStorage.removeItem('isLoggedIn');
         setNickname('');
         navigate('/');
         console.log('로그아웃 완료');

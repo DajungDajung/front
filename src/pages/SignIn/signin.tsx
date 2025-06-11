@@ -44,6 +44,7 @@ const Signin: React.FC = () => {
     try {
       const res = await axiosInstance.post('/auth/signin', { email, password });
       localStorage.setItem('nickname', res.data[0].nickname);
+      localStorage.setItem('isLoggedIn', 'true');
       alert('로그인 성공! 메인페이지로 이동합니다.');
       navigate('/');
     } catch (err) {

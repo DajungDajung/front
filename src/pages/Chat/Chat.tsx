@@ -85,20 +85,9 @@ function Chat(): JSX.Element {
   );
 
   useEffect(() => {
-    const getTokenFromCookie = (): string | null => {
-      const cookies = document.cookie.split(';');
-      for (const cookie of cookies) {
-        const [key, value] = cookie.trim().split('=');
-        if (key === 'token') {
-          return value;
-        }
-      }
-      return null;
-    };
+    const isLoggedIn = localStorage.getItem('isLoggedIn');
 
-    const token = getTokenFromCookie();
-
-    if (!token) {
+    if (!isLoggedIn) {
       navigate('/signin');
     } else {
       fetchChatRooms();
