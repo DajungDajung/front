@@ -1,67 +1,108 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect, JSX } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { authRequest } from '../../../api/axiosInstance.js';
-import { getComments } from '../../../api/commentsApi.js';
+import { authRequest } from '../../../api/axiosInstance';
+import { getComments } from '../../../api/commentsApi';
 import { deleteItem, getItemDetail } from '../../../api/itemsApi.js';
 import likeIcon from '../../../assets/ic_like.svg';
 import unLikeIcon from '../../../assets/ic_unlike.svg';
 import sampleImg from '../../../assets/sampleImg.svg';
-import { getDaysAgo } from '../../../utils/date';
-import { formatNumber } from '../../../utils/format';
+import { getDaysAgo } from '../../../utils/date.js';
+import { formatNumber } from '../../../utils/format.js';
 import { getImgSrc } from '../../../utils/image.js';
-import Comments from '../comments/Comments';
-import useKakaoMap from '../../../hooks/useKakaoMap';
+import Comments from '../comments/Comments.js';
+import useKakaoMap from '../../../hooks/useKakaoMap.js';
 import './ItemDetail.css';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import type {
+  itemDetail as iItemDetail,
+  item,
+} from '../../../types/item.model.js';
+import type { comment } from '../../../types/comment.model.js';
+import { seller } from '../../../types/user.model.js';
+import { location } from '../../../types/location.model.js';
 
-const ItemDetail = () => {
+import type { location as LocationType } from '../../../types/location.model.js';
+
+// Map component that calls useKakaoMap
+const KakaoMapComponent: React.FC<{ loc: LocationType }> = ({ loc }) => {
+  if (!loc.coordinate_x || !loc.coordinate_y) {
+    loc.coordinate_x = 33.4507;
+    loc.coordinate_y = 126.5707;
+    loc.title = '약속 장소';
+  }
+  const { address } = useKakaoMap({
+    containerId: 'mini_map',
+    initialCenter: {
+      lat: loc.coordinate_x,
+      lng: loc.coordinate_y,
+    },
+    options: {
+      disableUI: true,
+      fixedMap: true,
+    },
+  });
+  return (
+    <>
+      <div
+        id="mini_map"
+        className="border-[1px] rounded-xl border-gray-300 w-full h-52 relative"
+      />
+      <p>{[loc.title, address].join(',')}</p>
+    </>
+  );
+};
+
+const ItemDetail: React.FC = (): JSX.Element => {
   const navigate = useNavigate();
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
+  const [item, setItem] = useState<iItemDetail>();
+  const itemId = id ? parseInt(id) : undefined;
 
   const queryClient = useQueryClient();
-  const { data: itemDetailData } = useQuery({
+  const { data: itemDetailData } = useQuery<item>({
     queryKey: ['itemDetail', id],
-    queryFn: () => getItemDetail(id).then((res) => res.data),
+    queryFn: () => getItemDetail(id!),
     enabled: !!id,
   });
 
-  const { data: commentsData = [], refetch: refetchCommentData } = useQuery({
+  const { data: commentsData = [], refetch: refetchCommentData } = useQuery<
+    comment[]
+  >({
     queryKey: ['comments', id],
-    queryFn: () => getComments(id).then((res) => res.data),
-    enabled: !!id,
+    queryFn: () => getComments(id!),
   });
 
   const likeMutation = useMutation({
     mutationFn: () => {
       const method = isLike ? 'delete' : 'post';
-      return authRequest({ method, url: `/users/likes/${item.id}`, navigate });
+      return authRequest({ method, url: `/users/likes/${item?.id}`, navigate });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(['itemDetail', id]);
+      queryClient.invalidateQueries({ queryKey: ['itemDetail', id!] });
     },
   });
 
   const deleteMutation = useMutation({
-    mutationFn: () => deleteItem(item.id),
+    mutationFn: () => deleteItem(id!),
     onSuccess: () => {
       navigate('/');
     },
   });
 
-  const [item, setItem] = useState({});
-  const [seller, setSeller] = useState({});
-  const [isLike, setIsLike] = useState(false);
-  const [isSeller, setIsSeller] = useState(false);
-  const [comments, setComments] = useState([]);
-  const [location, setLocation] = useState({});
-  const [shouldRefetchComments, setShouldRefetchComments] = useState(false);
+  const [seller, setSeller] = useState<seller>();
+  const [isLike, setIsLike] = useState<boolean>(false);
+  const [isSeller, setIsSeller] = useState<boolean>(false);
+  const [comments, setComments] = useState<comment[]>([]);
+  const [location, setLocation] = useState<location>();
+  const [shouldRefetchComments, setShouldRefetchComments] =
+    useState<boolean>(false);
 
   useEffect(() => {
     if (itemDetailData) {
       setItem(itemDetailData.item);
       setSeller(itemDetailData.user);
       setIsLike(itemDetailData.item.liked === 'true');
-      setIsSeller(itemDetailData.item.isSeller === 'true');
+      setIsSeller(itemDetailData.item.seller === 'true');
       setLocation(itemDetailData.location);
     }
   }, [itemDetailData]);
@@ -77,19 +118,8 @@ const ItemDetail = () => {
   }, [shouldRefetchComments, refetchCommentData]);
 
   const [isMoreInfo, setIsMoreInfo] = useState(false);
-  const { address } = useKakaoMap({
-    containerId: 'mini_map',
-    initialCenter: {
-      lat: location.coordinateX || 37.5665,
-      lng: location.coordinateY || 126.978,
-    },
-    options: {
-      disableUI: true,
-      fixedMap: true,
-    },
-  });
 
-  const handleEdit = (id) => {
+  const handleEdit = () => {
     navigate(`/items/edit/${id}`, { state: { item, isEdit: true } });
   };
 
@@ -116,24 +146,21 @@ const ItemDetail = () => {
       <div className="item_detail_container">
         <div className="item_detail_left">
           <div className="img_wrapper">
-            <img
-              src={item.img_id ? getImgSrc(item.img_id) : sampleImg}
-              alt="Item"
-            />
+            <img src={item ? getImgSrc(item.img_id) : sampleImg} alt="Item" />
           </div>
           <div className="item_seller_container">
             <div className="item_seller">
               <img
-                src={getImgSrc(seller.image)}
+                src={seller ? getImgSrc(seller.image) : sampleImg}
                 alt="Item"
                 width={64}
-                style={{ borderRadius: '100px' }}
+                className="rounded-full"
               />
-              <p>{seller.seller}</p>
+              <p>{seller?.seller}</p>
             </div>
             <button
               className="shop_btn"
-              onClick={() => navigate(`/store/${seller.id}`)}
+              onClick={() => navigate(`/store/${seller?.id}`)}
             >
               <p>상점 보러가기</p>
             </button>
@@ -141,16 +168,16 @@ const ItemDetail = () => {
         </div>
 
         <div className="item_detail_right">
-          <p className="item_detail_category">{item.category}</p>
-          <p className="item_detail_title">{item.title}</p>
+          <p className="item_detail_category">{item?.category}</p>
+          <p className="item_detail_title">{item?.title}</p>
           <p className="item_detail_price">
             {item?.price ? formatNumber(item.price) + '원' : ''}
           </p>
           <p className="item_detail_date">
-            {item?.create_at ? getDaysAgo(item.create_at) : ''}
+            {item ? getDaysAgo(item?.create_at) : ''}
           </p>
           <p className={`item_detail_info ${isMoreInfo ? '' : 'line-clamp-3'}`}>
-            {item.contents}
+            {item?.contents}
             <a className="" onClick={handleMoreInfo}>
               더보기
             </a>
@@ -159,18 +186,18 @@ const ItemDetail = () => {
           <div className="item_detail_btns_container">
             <button
               className="item_detail_btn first_btn"
-              onClick={() => handleLikeButton(item.id)}
+              onClick={() => handleLikeButton()}
             >
               <div className="item_detail_like_btn">
                 <img src={isLike ? likeIcon : unLikeIcon} alt="Like" />
                 <p>좋아요</p>
-                <p className="like_count">{item.like}</p>
+                <p className="like_count">{item?.like}</p>
               </div>
             </button>
             {isSeller ? (
               <button
                 className="item_detail_btn mid_btn"
-                onClick={() => handleEdit(item.id)}
+                onClick={() => handleEdit()}
               >
                 <p>수정하기</p>
               </button>
@@ -183,7 +210,7 @@ const ItemDetail = () => {
             {isSeller ? (
               <button
                 className="item_detail_btn last_btn"
-                onClick={() => handleDelete(id)}
+                onClick={() => handleDelete()}
               >
                 <p>삭제하기</p>
               </button>
@@ -192,11 +219,7 @@ const ItemDetail = () => {
                 <p>구매하기</p>
               </button>
             )}
-            <div
-              className="border-[1px] rounded-xl border-gray-300 w-full h-52 object-center relative"
-              id="mini_map"
-            ></div>
-            <p>{[location.title, address].join(',')}</p>
+            {location && <KakaoMapComponent loc={location} />}
           </div>
         </div>
       </div>
@@ -204,7 +227,7 @@ const ItemDetail = () => {
       <div className="line" />
       <Comments
         comments={comments}
-        item_id={id}
+        itemId={itemId!}
         onCommentAdded={handleCommentAdded}
       />
     </>

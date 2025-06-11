@@ -16,7 +16,7 @@ export default function UserInfo({ userData }) {
       axiosInstance
         .get('/users/mypage')
         .then((response) => {
-          setFinalUserData(response.data[0]);
+          setFinalUserData(response.data);
         })
         .catch((err) => {
           if (err.response?.status === 404) {
@@ -26,7 +26,6 @@ export default function UserInfo({ userData }) {
         });
     }
   }, [userData, navigate]);
-
   if (!finalUserData) {
     return <div className={styles.userInfo}>로딩중...</div>;
   }

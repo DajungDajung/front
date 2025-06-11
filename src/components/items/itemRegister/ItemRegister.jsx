@@ -11,15 +11,13 @@ import { postLocation, putLocation } from '../../../api/locationAPI';
 
 const onlyNumber = (str) => str.replace(/[^0-9]/g, '');
 
-const ItemRegister = ({ isEdit = false, item = null }) => {
+const ItemRegister = ({ isEdit = false, item = null, oldLocation = null }) => {
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
 
   const { data: categories = [] } = useQuery({
     queryKey: ['categories'],
     queryFn: () => getCategories().then((res) => res.data),
-    staleTime: 1000 * 60 * 60 * 24,
-    refetchOnWindowFocus: false,
   });
 
   const [preview, setPreview] = useState(SampleImg);
@@ -83,19 +81,28 @@ const ItemRegister = ({ isEdit = false, item = null }) => {
       }
       const { title, address, coords } = event.data;
       if (title && address && coords) {
-        let payload = {
+        const newLocation = {
+          title,
+          address,
+          coordinateX: coords.lat,
+          coordinateY: coords.lng,
+        };
+        const payload = {
           title,
           address,
           coordinateX: coords.lat,
           coordinateY: coords.lng,
         };
         locationMutation.mutate(payload);
-        setLocation(payload);
+        setLocation((prev) => ({
+          id: prev.id,
+          ...newLocation,
+        }));
       }
     };
     window.addEventListener('message', handler);
     return () => window.removeEventListener('message', handler);
-  }, [locationMutation]);
+  }, [locationMutation, location.id]);
 
   useEffect(() => {
     if (isEdit && item) {

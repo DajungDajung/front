@@ -28,9 +28,10 @@ export default function MyPage() {
 
   useEffect(() => {
     const path = location.pathname;
+    console.log(path);
     if (
       path === outletFrontRoutes.info ||
-      window.location.pathname === outletFrontRoutes.infoUpdate
+      path === outletFrontRoutes.infoUpdate
     ) {
       axiosInstance
         .get(outletDataRoutes.info)

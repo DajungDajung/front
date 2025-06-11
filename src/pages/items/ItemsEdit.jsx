@@ -4,11 +4,11 @@ import { useLocation } from 'react-router-dom';
 
 const ItemsEdit = () => {
   const location = useLocation();
-  const { item, isEdit } = location.state || {};
+  const { item, isEdit, location } = location.state || {};
 
   return (
     <>
-      <ItemRegister isEdit={isEdit} item={item} />
+      <ItemRegister isEdit={isEdit} item={item} location={location} />
     </>
   );
 };

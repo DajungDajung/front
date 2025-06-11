@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import useKakaoMap from '../../hooks/useKakaoMap';
 import point from '../../assets/pointer.svg';
 import { useEffect, useState } from 'react';
-import { Coordination } from '../../types/location.model';
 
 function Map() {
   const [pointer, _setPointer] = useState(point);

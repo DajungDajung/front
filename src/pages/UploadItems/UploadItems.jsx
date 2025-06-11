@@ -23,7 +23,11 @@ export default function UploadItems() {
           <>
             <div className={style.UploadContainer}>
               {currentitems.map((item) => (
-                <SaleItemCard item={item} setItem={setContextUserItemData} />
+                <SaleItemCard
+                  key={item.id}
+                  item={item}
+                  setItem={setContextUserItemData}
+                />
               ))}
             </div>
             <div>

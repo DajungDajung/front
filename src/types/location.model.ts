@@ -1,9 +1,9 @@
-export interface Coordination {
-  coordinateX: number;
-  coordinateY: number;
+export interface coordination {
+  coordinate_x: number;
+  coordinate_y: number;
 }
 
-export interface Location extends Coordination {
+export interface location extends coordination {
   id: number;
   title: string;
   address: string;

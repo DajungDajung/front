@@ -33,7 +33,7 @@ export default function UserLikes() {
           <>
             <div className={style.LikesContainer}>
               {currentPage.map((item) => (
-                <CardItems item={item} />
+                <CardItems key={item.id} item={item} />
               ))}
             </div>
             <div>

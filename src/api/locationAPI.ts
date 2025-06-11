@@ -1,5 +1,6 @@
 import axios, { AxiosInstance } from 'axios';
 const { VITE_BACK_URL } = import.meta.env;
+import { location } from '../types/location.model';
 
 const axiosInstance: AxiosInstance = axios.create({
   baseURL: VITE_BACK_URL,
@@ -11,8 +12,8 @@ const axiosInstance: AxiosInstance = axios.create({
 
 export const getLocation = (id: string) => axiosInstance.get(`/location/${id}`);
 
-export const postLocation = (loaction: Location) =>
-  axiosInstance.post('/location', loaction);
+export const postLocation = (loaction: location) =>
+  axiosInstance.post('/locations', loaction);
 
-export const putLocation = (id: string, loaction: Location) =>
-  axiosInstance.put(`/location/${id}`, loaction);
+export const putLocation = (loaction: location) =>
+  axiosInstance.put('/locations', loaction);

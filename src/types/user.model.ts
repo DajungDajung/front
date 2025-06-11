@@ -1,5 +1,5 @@
-export interface Seller {
+export interface seller {
   id: number;
   seller: string;
-  image: string;
+  image: number;
 }
