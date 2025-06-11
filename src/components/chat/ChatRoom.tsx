@@ -22,9 +22,10 @@ function ChatRoom({ rooms, onSelect, selectedRoomId }: Props): JSX.Element {
         >
           <div className="chat_room_content">
             <img
+              alt="chat_room_img"
               src={getImgSrc(room.imgId) || defaultProfile}
               width={50}
-              style={{ borderRadius: '100px' }}
+              className="rounded-full"
             />
             <div className="chat_room_text">
               <p className="chat_room_nickname">{room.nickname}</p>

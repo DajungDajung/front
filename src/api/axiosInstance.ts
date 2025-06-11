@@ -1,7 +1,7 @@
-import axios, { Method } from 'axios';
-const { VITE_BACK_URL } = import.meta.env;
+import axios, { AxiosInstance, Method } from 'axios';
+const VITE_BACK_URL = import.meta.env.VITE_BACK_URL;
 
-const axiosInstance = axios.create({
+export const axiosInstance: AxiosInstance = axios.create({
   baseURL: VITE_BACK_URL,
   withCredentials: true,
   headers: {

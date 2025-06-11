@@ -106,8 +106,14 @@
     /* Completeness */
     // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
     "skipLibCheck": true /* Skip type checking all .d.ts files. */,
-    "types": ["vite/client", "jest"]
+    "types": ["vite/client", "jest", "kakao.maps.d.ts"]
   },
-  "include": ["src/**/*", "eslint.config.js", "svg.d.ts"],
+  "include": [
+    "src/**/*",
+    "eslint.config.js",
+    "svg.d.ts",
+    "vite.config.ts",
+    "global.d.ts"
+  ],
   "exclude": ["node_modules", "**/*.spec.ts"]
 }

@@ -1,0 +1,7 @@
+{
+  "build": {
+    "env": {
+      "ROLLUP_PURE_JS": "true"
+    }
+  }
+}

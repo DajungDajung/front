@@ -4,10 +4,10 @@ import delete_btn from '../../../assets/ic_x.svg';
 import { getImgSrc } from '../../../utils/image';
 import { authRequest } from '../../../api/axiosInstance';
 import { useNavigate } from 'react-router-dom';
-import { Comment } from '../../../types/comment.type';
+import type { comment } from '../../../types/comment.model';
 
 interface CommentsProps {
-  comments: Comment[];
+  comments: comment[];
   itemId: number;
   onCommentAdded: () => void;
 }
@@ -98,15 +98,20 @@ const Comments: React.FC<CommentsProps> = ({
         {comments.map((comment) => (
           <div className="comment" key={comment.id}>
             <img
-              src={getImgSrc(comment.imgId)}
+              alt="comment_img"
+              src={getImgSrc(comment.img_id)}
               width={50}
-              style={{ borderRadius: '100px' }}
+              className="rounded-full"
             />
             <div className="comment_txt_container">
               <p className="comment_nickname">{comment.nickname}</p>
               <p className="comment_txt">{comment.contents}</p>
             </div>
-            <img src={delete_btn} onClick={() => deleteComment(comment.id)} />
+            <img
+              alt="comment_delete_btn"
+              src={delete_btn}
+              onClick={() => deleteComment(comment.id)}
+            />
           </div>
         ))}
       </div>

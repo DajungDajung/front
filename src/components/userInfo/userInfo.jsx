@@ -9,18 +9,16 @@ export default function UserInfo({ userData }) {
   const [finalUserData, setFinalUserData] = useState(null);
   const navigate = useNavigate();
 
-  console.log("userData:", userData)
-  
   useEffect(() => {
     if (userData) {
       setFinalUserData(userData);
     } else {
       axiosInstance
         .get('/users/mypage')
-        .then(response => {
-          setFinalUserData(response.data[0]);
+        .then((response) => {
+          setFinalUserData(response.data);
         })
-        .catch(err => {
+        .catch((err) => {
           if (err.response?.status === 404) {
             alert('존재하지 않는 사용자입니다.\n메인페이지로 이동합니다.');
             navigate('/');
@@ -28,7 +26,6 @@ export default function UserInfo({ userData }) {
         });
     }
   }, [userData, navigate]);
-
   if (!finalUserData) {
     return <div className={styles.userInfo}>로딩중...</div>;
   }
@@ -36,7 +33,10 @@ export default function UserInfo({ userData }) {
   return (
     <div className={styles.userInfo}>
       <div className={styles.profilebox}>
-        <img className={styles.profileImage} src={getImgSrc(finalUserData?.img_id)} />
+        <img
+          className={styles.profileImage}
+          src={getImgSrc(finalUserData?.img_id)}
+        />
       </div>
       <div className={styles.infobox}>
         <div>
@@ -50,7 +50,11 @@ export default function UserInfo({ userData }) {
             <p>{0} 회</p>
           </div>
           <div className={styles.profileDescription}>
-            <p>{finalUserData?.info ? finalUserData?.info : '상점에 대한 설명이 없습니다.'}</p>
+            <p>
+              {finalUserData?.info
+                ? finalUserData?.info
+                : '상점에 대한 설명이 없습니다.'}
+            </p>
           </div>
         </div>
         <div className={styles.extraInfo}>
@@ -62,12 +66,17 @@ export default function UserInfo({ userData }) {
               </tr>
               <tr>
                 <td className={styles.tTitle}>전화번호</td>
-                <td className={styles.tContent}>{finalUserData?.contact.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3')}</td>
+                <td className={styles.tContent}>
+                  {finalUserData?.contact.replace(
+                    /(\d{3})(\d{4})(\d{4})/,
+                    '$1-$2-$3',
+                  )}
+                </td>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
-    </div >
-  )
+    </div>
+  );
 }

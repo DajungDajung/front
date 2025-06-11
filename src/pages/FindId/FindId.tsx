@@ -44,8 +44,10 @@ const FindId: React.FC = () => {
     <div className="w-full min-h-screen flex flex-col items-center justify-center bg-white">
       <img src={Logo} alt="logo" className="mb-6 w-[180px]" />
       <div className="bg-white px-10 py-8 rounded-2xl shadow-xl w-[390px] h-[340px] text-center">
-
-        <form className="flex flex-col !mt-[40px] gap-4 items-center" onSubmit={handleSubmit}>
+        <form
+          className="flex flex-col !mt-[40px] gap-4 items-center"
+          onSubmit={handleSubmit}
+        >
           <input
             name="name"
             value={form.name}

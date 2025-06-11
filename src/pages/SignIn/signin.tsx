@@ -12,9 +12,9 @@ interface SigninForm {
 }
 
 const SOCIAL_LOGIN_URLS: Record<'google' | 'naver' | 'kakao', string> = {
-  kakao: "http://3.34.9.40:3002/auth/kakao",
-  google: "http://3.34.9.40:3002/auth/google",
-  naver: "http://3.34.9.40:3002/auth/naver",
+  kakao: 'http://3.34.9.40:3002/auth/kakao',
+  google: 'http://3.34.9.40:3002/auth/google',
+  naver: 'http://3.34.9.40:3002/auth/naver',
 };
 
 const Signin: React.FC = () => {
@@ -30,7 +30,9 @@ const Signin: React.FC = () => {
   };
 
   const handleSignin = async (e?: React.FormEvent) => {
-    if (e) e.preventDefault();
+    if (e) {
+      e.preventDefault();
+    }
 
     const { email, password } = form;
 
@@ -41,7 +43,7 @@ const Signin: React.FC = () => {
 
     try {
       const res = await axiosInstance.post('/auth/signin', { email, password });
-      localStorage.setItem('nickname', res.data.nickname);
+      localStorage.setItem('nickname', res.data[0].nickname);
       alert('로그인 성공! 메인페이지로 이동합니다.');
       navigate('/');
     } catch (err) {
@@ -61,7 +63,10 @@ const Signin: React.FC = () => {
 
   return (
     <div className="w-full min-h-screen bg-white flex flex-col items-center">
-      <div style={{ marginTop: '100px' }} className="flex flex-col items-center">
+      <div
+        style={{ marginTop: '100px' }}
+        className="flex flex-col items-center"
+      >
         <img src={Logo} alt="logo" className="mb-6 w-[180px]" />
 
         <div className="bg-white px-10 py-8 rounded-2xl shadow-xl w-[410px] min-h-[480px] text-center">
@@ -124,7 +129,9 @@ const Signin: React.FC = () => {
           </div>
 
           <div className="flex flex-col items-center relative top-[30px]">
-            <p className="text-sm font-medium relative top-[10px]">SNS 계정으로 간편하게 시작하기</p>
+            <p className="text-sm font-medium relative top-[10px]">
+              SNS 계정으로 간편하게 시작하기
+            </p>
 
             <div className="flex justify-center gap-17 relative top-[30px]">
               <button
@@ -137,7 +144,9 @@ const Signin: React.FC = () => {
                   alt="google"
                   className="w-10 h-10 rounded-lg border border-gray-200"
                 />
-                <span className="!text-xs text-gray-600 !mt-2 leading-none">google</span>
+                <span className="!text-xs text-gray-600 !mt-2 leading-none">
+                  google
+                </span>
               </button>
 
               <button
@@ -150,7 +159,9 @@ const Signin: React.FC = () => {
                   alt="naver"
                   className="w-10 h-10 rounded-lg bg-white"
                 />
-                <span className="!text-xs text-gray-600 !mt-2 leading-none">naver</span>
+                <span className="!text-xs text-gray-600 !mt-2 leading-none">
+                  naver
+                </span>
               </button>
 
               <button
@@ -163,7 +174,9 @@ const Signin: React.FC = () => {
                   alt="kakao"
                   className="w-10 h-10 rounded-lg bg-white"
                 />
-                <span className="!text-xs text-gray-600 !mt-2 leading-none">kakao</span>
+                <span className="!text-xs text-gray-600 !mt-2 leading-none">
+                  kakao
+                </span>
               </button>
             </div>
           </div>
