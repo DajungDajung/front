@@ -27,19 +27,22 @@ const Signup = () => {
       return;
     }
 
-    axiosInstance.post('/auth/signup', {
-      name: form.name,
-      nickname: form.nickname,
-      email: form.email,
-      contact: form.phone,
-      password: form.password,
-    }).then((res) => {
-      alert('회원가입이 완료되었습니다');
-      navigate('/signin');
-    }).catch(err => {
-      console.error('회원가입 오류:', err);
-      alert('이메일 혹은 전화번호가 중복됩니다.');
-    })
+    axiosInstance
+      .post('/auth/signup', {
+        name: form.name,
+        nickname: form.nickname,
+        email: form.email,
+        contact: form.phone,
+        password: form.password,
+      })
+      .then(() => {
+        alert('회원가입이 완료되었습니다');
+        navigate('/signin');
+      })
+      .catch((err) => {
+        console.error('회원가입 오류:', err);
+        alert('이메일 혹은 전화번호가 중복됩니다.');
+      });
   };
 
   return (
@@ -47,15 +50,62 @@ const Signup = () => {
       <h2 className="signup-title">회원가입</h2>
 
       <form className="signup-form" onSubmit={handleSubmit}>
-        <input name="name" value={form.name} onChange={handleChange} className="signup-input" placeholder="이름" required />
-        <input name="nickname" value={form.nickname} onChange={handleChange} className="signup-input" placeholder="닉네임" required />
-        <input name="email" type="email" value={form.email} onChange={handleChange} className="signup-input" placeholder="이메일" required />
-        <input name="phone" value={form.phone} onChange={handleChange} className="signup-input" placeholder="전화번호 (- 없이 숫자만 입력)" required />
-        <input name="password" type="password" value={form.password} onChange={handleChange} className="signup-input" placeholder="비밀번호" required />
-        <input name="confirmPassword" type="password" value={form.confirmPassword} onChange={handleChange} className="signup-input" placeholder="비밀번호 확인" required />
+        <input
+          name="name"
+          value={form.name}
+          onChange={handleChange}
+          className="signup-input"
+          placeholder="이름"
+          required
+        />
+        <input
+          name="nickname"
+          value={form.nickname}
+          onChange={handleChange}
+          className="signup-input"
+          placeholder="닉네임"
+          required
+        />
+        <input
+          name="email"
+          type="email"
+          value={form.email}
+          onChange={handleChange}
+          className="signup-input"
+          placeholder="이메일"
+          required
+        />
+        <input
+          name="phone"
+          value={form.phone}
+          onChange={handleChange}
+          className="signup-input"
+          placeholder="전화번호 (- 없이 숫자만 입력)"
+          required
+        />
+        <input
+          name="password"
+          type="password"
+          value={form.password}
+          onChange={handleChange}
+          className="signup-input"
+          placeholder="비밀번호"
+          required
+        />
+        <input
+          name="confirmPassword"
+          type="password"
+          value={form.confirmPassword}
+          onChange={handleChange}
+          className="signup-input"
+          placeholder="비밀번호 확인"
+          required
+        />
 
         <div className="signup-divider" />
-        <button type="submit" className="signup-btn">회원가입</button>
+        <button type="submit" className="signup-btn">
+          회원가입
+        </button>
       </form>
     </div>
   );

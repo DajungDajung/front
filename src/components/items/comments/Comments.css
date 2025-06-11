@@ -5,6 +5,7 @@
     flex-direction: column;
     gap: 20px;
     overflow: hidden;
+    margin-bottom: 20px;
 }
 
 .comment_container {

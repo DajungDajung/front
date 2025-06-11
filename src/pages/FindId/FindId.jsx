@@ -19,18 +19,21 @@ const FindId = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const sanitizedContact = form.contact
+    const sanitizedContact = form.contact;
 
-    axiosInstance.post('/auth/findid', {
-      name: form.name,
-      contact: sanitizedContact
-    }).then((res) => {
-      alert(`가입된 이메일은 다음과 같습니다:\n\n📧 ${res.data.email}`);
-      navigate('/signin');
-    }).catch(err => {
-      console.error('아이디 찾기 오류:', err);
-      alert('일치하는 회원 정보가 없습니다.');
-    })
+    axiosInstance
+      .post('/auth/findid', {
+        name: form.name,
+        contact: sanitizedContact,
+      })
+      .then((res) => {
+        alert(`가입된 이메일은 다음과 같습니다:\n\n📧 ${res.data.email}`);
+        navigate('/signin');
+      })
+      .catch((err) => {
+        console.error('아이디 찾기 오류:', err);
+        alert('일치하는 회원 정보가 없습니다.');
+      });
   };
 
   return (
@@ -55,7 +58,9 @@ const FindId = () => {
           required
         />
         <div className="findid-divider" />
-        <button type="submit" className="button button--primary">아이디 찾기</button>
+        <button type="submit" className="button button--primary">
+          아이디 찾기
+        </button>
       </form>
     </div>
   );

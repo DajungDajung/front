@@ -1,4 +1,5 @@
 import { getDaysAgo } from './date';
+import { describe, test } from 'node:test';
 
 describe('getDaysAgo 함수 테스트', () => {
   test("현재 시간과 같다면 '방금 전'을 반환", () => {
