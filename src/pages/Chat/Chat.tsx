@@ -85,11 +85,28 @@ function Chat(): JSX.Element {
   );
 
   useEffect(() => {
-    fetchChatRooms();
+    const getTokenFromCookie = (): string | null => {
+      const cookies = document.cookie.split(';');
+      for (const cookie of cookies) {
+        const [key, value] = cookie.trim().split('=');
+        if (key === 'token') {
+          return value;
+        }
+      }
+      return null;
+    };
+
+    const token = getTokenFromCookie();
+
+    if (!token) {
+      navigate('/signin');
+    } else {
+      fetchChatRooms();
+    }
   }, []);
 
   // socket
-  const [connectionError, setConnectionError] = useState(false);
+  const [connectionError, setConnectionError] = useState(true);
   const socketRef = useRef<Socket | null>(null);
 
   useEffect(() => {
